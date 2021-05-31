@@ -1,0 +1,59 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li><a href="{:url('rbac/index')}">{:lang('ADMIN_RBAC_INDEX')}</a></li>
+                                <li class="active"><a href="{:url('rbac/roleadd')}">{:lang('ADMIN_RBAC_ROLEADD')}</a></li>
+                            </ul>
+                            <div class="card-body">
+                                <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('rbac/roleAddPost')}" method="post">
+                                    <div class="form-group">
+                                        <label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('ROLE_NAME')}</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <input type="text" class="form-control" id="input-name" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">{:lang('ROLE_DESCRIPTION')}</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <textarea type="text" class="form-control" id="input-remark" name="remark"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{:lang('STATUS')}</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="status" value="1"> <span>{:lang('ENABLED')}</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="status" value="0"> <span>{:lang('DISABLED')}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

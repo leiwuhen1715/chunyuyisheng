@@ -1,0 +1,81 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href='{:cmf_url("user/adminIndex/index")}'>{:lang('USER_INDEXADMIN_INDEX')}</a></li>
+                            </ul>
+                            <div class="card-body">
+
+                                <form method="post" class="js-ajax-form">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" >
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>{:lang('USERNAME')}</th>
+                                                <th>{:lang('NICENAME')}</th>
+                                                <th>{:lang('AVATAR')}</th>
+                                                <th>手机</th>
+                                                <th>{:lang('REGISTRATION_TIME')}</th>
+                                                <th>{:lang('LAST_LOGIN_TIME')}</th>
+                                                <th>{:lang('LAST_LOGIN_IP')}</th>
+                                                <th>{:lang('STATUS')}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <php>
+                                                $user_statuses=array("0"=>lang('USER_STATUS_BLOCKED'),"1"=>lang('USER_STATUS_ACTIVATED'),"2"=>lang('USER_STATUS_UNVERIFIED'));
+                                            </php>
+                                            <foreach name="list" item="vo">
+                                                <tr>
+                                                    <td>{$vo.id}</td>
+                                                    <td>{$vo['user_login']?$vo['user_login']:($vo['mobile']?$vo['mobile']:lang('THIRD_PARTY_USER'))}
+                                                    </td>
+                                                    <td>{$vo['user_nickname']?$vo['user_nickname']:lang('NOT_FILLED')}</td>
+                                                    <td><img width="25" height="25" src="{:url('user/public/avatar',array('id'=>$vo['id']))}"/></td>
+                                                    <td>{$vo.user_email}</td>
+                                                    <td>{$vo.mobile}</td>
+                                                    <td>{:date('Y-m-d H:i:s',$vo['create_time'])}</td>
+                                                    <td>{:date('Y-m-d H:i:s',$vo['last_login_time'])}</td>
+                                                    <td>{$vo.last_login_ip}</td>
+                                                    <td>
+                                                        <switch name="vo.user_status">
+                                                            <case value="0">
+                                                                <span class="label label-danger">{$user_statuses[$vo['user_status']]}</span>
+                                                            </case>
+                                                            <case value="1">
+                                                                <span class="label label-success">{$user_statuses[$vo['user_status']]}</span>
+                                                            </case>
+                                                            <case value="2">
+                                                                <span class="label label-warning">{$user_statuses[$vo['user_status']]}</span>
+                                                            </case>
+                                                        </switch>
+                                                    </td>
+                                                </tr>
+                                            </foreach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="pagination">{$page}</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

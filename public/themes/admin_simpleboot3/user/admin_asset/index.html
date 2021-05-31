@@ -1,0 +1,104 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="{:url('AdminAsset/index')}">资源列表</a></li>
+                            </ul>
+                            <!--新增搜索框-->
+                            <form class="well form-inline margin-top-20" method="post" action="{:url('AdminAsset/index')}"> 
+                                <input type="text" class="form-control" name="filename" style="width: 200px;" value="{:input('request.filename')}" placeholder="请输入关键字...">
+                                <input type="submit" class="btn btn-primary" value="搜索">
+                                <a class="btn btn-danger" href="{:url('AdminAsset/index')}">清空</a>
+                            </form>
+                            <form  class="js-ajax-form" action="" method="post" novalidate="novalidate">
+                            <div class="table-actions">
+                                <a class="btn btn-sm btn-info" href="javascript:uploadMultiImage('图片上传','#photos','photos-item-tpl');" >图片上传</a>
+                                <a class="btn btn-sm btn-warning" href="javascript:uploadMultiFile('附件上传','#files','files-item-tpl','file');">文件上传</a>
+                                <button class="btn btn-sm btn-danger  js-ajax-submit" type="submit" data-action="{:url('AdminAsset/Multidelete',array())}" data-subcheck="true" data-msg="您确定删除吗？">批量删除</button>
+                            </div>
+
+                            <div class="card-body  js-check-wrap">
+                            <php>$status=['不可用', '可用'];</php>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" >
+                                        <thead>
+                                        <tr>
+                                            <th width="16">
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"><span></span>
+                                                </label>
+                                            </th>
+                                            <th width="50">ID</th>
+                                            <th>用户</th>
+                                            <th>文件大小</th>
+                                            <th>文件名</th>
+                                            <th>图像</th>
+                                            <th>文件路径</th>
+                                            <th>状态</th>
+                                            <th width="100">{:lang('ACTIONS')}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <php>
+                                            $asset_img_suffixes=['bmp','jpg','jpeg','png','gif','tiff'];/*TODO ADD MORE*/
+                                        </php>
+                                        <foreach name="assets" item="vo">
+                                            <tr>
+                                                <td>
+                                                    <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                                                           value="{$vo.id}"><span></span>
+                                                       </label>
+                                                </td>
+                                                <td>{$vo.id}</td>
+                                                <td>
+                                                    用户ID:{$vo.user_id} {$vo.user_login} {$vo.user_nickname}
+                                                </td>
+                                                <td>{$vo.file_size/1024|round}KB</td>
+                                                <td>{$vo.filename}</td>
+                                                <td>
+                                                    <if condition="in_array(strtolower($vo['suffix']),$asset_img_suffixes)">
+                                                        <a href="javascript:parent.imagePreviewDialog('{:cmf_get_image_preview_url($vo['file_path'])}');">
+                                                            <i class="mdi mdi-tooltip-image"></i>
+                                                        </a>
+                                                    </if>
+                                                </td>
+                                                <td>
+                                                    {$vo.file_path}
+                                                    <if condition="!file_exists('upload/'.$vo['file_path'])">
+                                                        <span style='color:red;'>&nbsp;&nbsp(文件丢失)</span>
+                                                    </if>
+                                                </td>
+                                                <td>{$status[$vo['status']]}</td>
+                                                <td>
+                                                    <a class="btn btn-xs btn-danger js-ajax-delete"
+                                                       href="{:url('AdminAsset/delete',array('id'=>$vo['id']))}">{:lang('DELETE')}</a>
+                                                </td>
+                                            </tr>
+                                        </foreach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination">{$page|default=''}</div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

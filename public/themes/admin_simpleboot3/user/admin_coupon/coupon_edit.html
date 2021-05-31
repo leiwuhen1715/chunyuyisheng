@@ -1,0 +1,80 @@
+<include file="public@new_header"/>
+</head>
+<body>
+
+    <div class="layui-fluid">
+        
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li><a href="{:url('adminCoupon/couponType')}">优惠劵类型</a></li>
+                    <li class="layui-this"><a>编辑优惠劵类型</a></li>
+                </ul>
+            </div>
+          <form action="{:url('adminCoupon/couponEdit')}" class="layui-form js-ajax-form" method="post">
+          <div class="layui-card-body layui-row" style="padding: 15px;">
+            <div class="layui-tab ">
+                
+                <div class='layui-col-md6'>
+                    <div class="layui-tab-item layui-show">
+                      <input type="hidden" name="id" value="{$data.id}" />
+                      
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value='{$data.name}'>
+                        </div>
+                      </div>
+                      <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">描述</label>
+                        <div class="layui-input-block">
+                          <textarea name="remark" placeholder="请输入描述" class="layui-textarea">{$data.remark}</textarea>
+                        </div>
+                      </div>
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">消费金额</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="total_amount" class="layui-input" value='{$data.total_amount}'>
+                        </div>
+                      </div>
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">金额</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="amount" class="layui-input" value='{$data.amount}'>
+                        </div>
+                      </div>
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">天数</label>
+                        <div class="layui-input-block">
+                          <input type="number" name="days" class="layui-input" value='{$data.days}'>
+                        </div>
+                      </div>
+
+                      <!-- <div class="layui-form-item">
+                        <label class="layui-form-label">显示</label>
+                        <div class="layui-input-block">
+                          <input type="checkbox" name="" value="1" lay-skin="switch" <eq name='data.days' value='1'>checked</eq> lay-text="是|否">
+                        </div>
+                      </div> -->
+                      <div class="layui-form-item">
+                          <div class="layui-input-block">
+                            <button class="layui-btn js-ajax-submit" >立即提交</button>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            
+          </div>
+          </form>
+        </div>
+    </div>
+    <include file="public@scripts"/>
+    <script src="__STATIC__/js/layui/layui.js"></script>
+    <script>
+        layui.use(['form'], function(){
+          var form = layui.form
+        })
+    </script>
+</body>
+</html>

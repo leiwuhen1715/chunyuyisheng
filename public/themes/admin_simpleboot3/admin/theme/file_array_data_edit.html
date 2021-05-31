@@ -1,0 +1,46 @@
+<include file="theme/functions"/>
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li><a href="{:url('theme/fileArrayData',['tab'=>$tab,'var'=>$var,'file_id'=>$file_id,'widget'=>$widget])}">所有数据</a></li>
+                                <heq name="item_index" value="">
+                                    <li class="active"><a>添加数据</a></li>
+                                    <else/>
+                                    <li>
+                                        <a href="{:url('theme/fileArrayDataEdit',['tab'=>$tab,'var'=>$var,'file_id'=>$file_id,'widget'=>$widget])}">添加数据</a>
+                                    </li>
+                                    <li class="active"><a>编辑数据</a></li>
+                                </heq>
+
+                            </ul>
+                            <div class="card-body">
+                                <form method="post" class="js-ajax-form margin-top-20"
+                                      action="{:url('theme/fileArrayDataEditPost',['tab'=>$tab,'var'=>$var,'file_id'=>$file_id,'widget'=>$widget])}">
+                                    {:_parse_vars($array_item,'item',2)}
+                                    <div class="form-group" style="display: none;">
+                                        <input type="hidden" name="item_index" value="{$item_index}">
+                                        <button type="submit" class="btn btn-primary js-ajax-submit" id="submit-btn">保存</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<include file="theme/scripts"/>
+</body>
+</html>

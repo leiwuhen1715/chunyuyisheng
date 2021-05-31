@@ -1,0 +1,95 @@
+<include file="public@new_header"/>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <a href="{:url('AdminCapital/index')}">支付明细</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body js-check-wrap">
+              <form class="layui-form form-inline margin-top-20" method="post" action="{:cmf_url('AdminGoods/daochu')}">
+                <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto" style='margin-bottom: 10px'>
+                  搜索：
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="title" name='keyword'
+                         value="" placeholder="昵称/手机">
+                  </div>
+                  <div class="layui-inline">
+                    <input type="text" id='date' class="layui-input" name="start_time" placeholder="开始时间" value="{$start_time|default=''}" autocomplete="off">
+                  </div>-
+                  <div class="layui-inline">
+                    <input type="text"  id='date1' class="layui-input" name="end_time"  placeholder="结束时间"  value="{$end_time|default=''}" autocomplete="off">
+                  </div>
+                  <button type='button' class="layui-btn" lay-submit lay-filter="LAY-app-order-search">搜索</button>
+              </div>
+
+              <div class="layui-card-body table-responsive">
+                  <table class="layui-hide" id="test" lay-filter="test"></table>
+              </div>
+              </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="__STATIC__/js/layui/layui.js"></script>
+    <script type="text/html" id="test-table-totalRow-toolbarDemo"></script>
+    <script type="text/html" id="buttonTpl">
+
+        {{#  if(d.pay_code == 'alipay'){ }}
+          <button type="button" class="layui-btn layui-btn-warm layui-btn-xs">支付宝</button>
+        {{#  } else if(d.pay_code == 'wxpay'){ }}
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">微信</button>
+        {{#  } }}
+    </script>
+<script>
+
+    layui.use(['form','table','laydate'], function(){
+      var form = layui.form
+      ,table = layui.table
+      ,laydate = layui.laydate;
+
+      //日期
+      laydate.render({
+        elem: '#date'
+      });
+      laydate.render({
+        elem: '#date1'
+      });
+      table.render({
+        elem: '#test'
+        ,url:"{:cmf_url('adminPay/ajax')}"
+        ,toolbar:"#test-table-totalRow-toolbarDemo"
+        ,cols: [[
+          {field:'id', width:80, title: 'ID', sort: true}
+          ,{field:'user_nickname',width:110, title: '用户'}
+          ,{field:'mobile',width:150, title: '手机'}
+          ,{field:'goods_name', title: '产品'}
+          ,{field:'amount',width:110, title: '金额',sort: true}
+          ,{field:'pay_code', width:110, title: '支付方式', templet: "#buttonTpl",}
+          ,{field:'pay_time',  width:210,title: '支付日期', sort: true}
+        ]]
+        ,id: 'testReload'
+        ,page: true
+      });
+
+        //监听搜索
+        form.on('submit(LAY-app-order-search)', function(data){
+          var field = data.field;
+          
+          //执行重载
+          table.reload('testReload', {
+            where: field
+          });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

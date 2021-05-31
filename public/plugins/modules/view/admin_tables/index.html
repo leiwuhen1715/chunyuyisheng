@@ -1,0 +1,83 @@
+<include file="public@header"/>
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <include file="public/_nav"/>
+            <li class="active"><a href="{:cmf_plugin_url('Modules://AdminTables/index',['modules_id'=>$modules_id])}">【{$modules_name}】表管理</a></li>
+            <div class="text-right" style="margin-right: 40px;">
+                <a class="btn btn-info"  href="{:cmf_plugin_url('Modules://AdminIndex/index')}"><i class="fa fa-reply"></i> 返回模型列表</a>
+            </div>
+        </ul>
+
+        <!-- 温馨提示 -->
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>双击列“表说明/描述”可编辑！</p>
+        </div>
+
+        <form action="" method="post" class="js-ajax-form margin-top-20">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr class="row">
+                    <th class="col-sm-2">拼音/英文标识</th>
+                    <th class="col-sm-2">表名/全称</th>
+                    <th class="col-sm-2">表说明/描述</th>
+                    <th class="col-sm-2">数据行数</th>
+                    <th class="col-sm-1">表引擎</th>
+                    <th class="col-sm-3">{:lang('ACTIONS')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <foreach name="tables" item="vo">
+                    <tr class="row">
+                        <td>{:empty($vo.pinyin)?'【主表】':$vo.pinyin}</td>
+                        <td>{$vo.Name}</td>
+                        <td>
+                            <div class="ajax-change-submit-text" data-name="Comment" style="min-width: 50px;min-height:20px;display: block;"
+                                 data-action="{:cmf_plugin_url('Modules://AdminTables/ajaxPostTable',array('table_name'=>$vo['Name']))}">
+                                {:isset($vo['Comment'])?$vo['Comment']:''}
+                            </div>
+                        </td>
+                        <td>{$vo.Rows}</td>
+                        <td>{$vo.Engine}</td>
+                        <td>
+                            <a  href="{:cmf_plugin_url('Modules://AdminControl/index',array('table_name'=>$vo['Name'],'modules_id'=>$modules_id))}">配置</a> |
+                            <a  href="{:cmf_plugin_url('Modules://AdminTables/fields',array('table_name'=>$vo['Name'],'modules_id'=>$modules_id))}">字段管理</a> |
+                            <a class="js-ajax-delete" href="{:cmf_plugin_url('Modules://AdminTables/delete',array('table_name'=>$vo['Name'],'modules_id'=>$modules_id))}">{:lang('DELETE')}</a>
+                        </td>
+                    </tr>
+                </foreach>
+
+                <!-- 添加一张表 -->
+                <tr><td colspan="6">&nbsp;</td></tr>
+                <tr class="row">
+                    <td><input type="text" class="form-control"  name="add[pinyin]"  placeholder="拼音/标识"></td>
+                    <td><input type="text" disabled class="form-control" name="add[tablename]"  placeholder="表全称"></td>
+                    <td><input type="text"  class="form-control" name="add[remark]" placeholder="表说明/描述"></td>
+                    <td colspan="2">
+                        与主表关系：
+                        <label class="radio-inline">
+                            <input type="radio" name="add[relate]" value="0">不关联
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="add[relate]" value="1" checked>一对一
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="add[relate]" value="2">一对多
+                        </label>
+                    </td>
+                    <td><button class="btn btn-success js-ajax-submit" data-action="{:cmf_plugin_url('Modules://AdminTables/add',['modules_id'=>$modules_id,'modules_pinyin'=>$modules_pinyin])}">+添加一张表</button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin-list.js"></script>
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>
+
+

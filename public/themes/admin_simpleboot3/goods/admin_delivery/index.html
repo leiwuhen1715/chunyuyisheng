@@ -1,0 +1,134 @@
+<include file="public@new_header"/>
+
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <a href="{:url('AdminDelivery/index')}">退款列表</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body js-check-wrap">
+              <form class="layui-form form-inline margin-top-20" method="post" action="">
+                <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto" style='margin-bottom: 10px'>
+                  <!-- 搜索： -->
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="keyword_sn" name='keyword_sn' value="" placeholder="搜索订单编号">
+                  </div>
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="keyword_name" name='keyword_name' value="" placeholder="搜索收货人">
+                  </div>
+                  <div class="layui-inline">
+                     <select class="layui-input" name="order_status" id="order_status">
+                        <option value="">订单状态</option>
+                        <option value='0'>未处理</option>
+        				<option value='1'>已退款</option>
+        				<option value='4'>已驳回</option>
+                     </select>
+                  </div>
+                  <button type='button' class="layui-btn" lay-submit lay-filter="LAY-app-order-search">搜索</button>
+              </div>
+
+              <div class="layui-card-body table-responsive">
+                  <table class="layui-hide" id="test" lay-filter="test"></table>
+              </div>
+              </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="__STATIC__/js/layui/layui.js"></script>
+	<script type="text/html" id="barDemo">
+	  <a class="layui-btn layui-btn-xs" href="{:cmf_url('AdminDelivery/detail')}?id={{d.delivery_id}}">编辑</a>
+	  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+	<script type="text/html" id="buttonTpl">
+        {{#  if(d.status === 1){ }}
+            <button type='button' class="layui-btn layui-btn-normal layui-btn-xs">已退款</button>
+        {{#  } else if(d.status === 2) { }}
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">已驳回</button>
+        {{#  } else { }}
+            <button type="button" class="layui-btn layui-btn-warm layui-btn-xs">待处理</button>
+        {{#  } }}
+    </script>
+	<script type="text/html" id="test-table-totalRow-toolbarDemo">
+	  <div class="layui-btn-container">
+	    <!--button type='button' class="layui-btn layui-btn-sm" lay-event="getCheckData">删除</button-->
+	  </div>
+	</script>
+	<script>
+
+	    layui.use(['form','table'], function(){
+	      var form = layui.form
+	      ,layer = layui.layer
+	      ,table = layui.table;
+
+	      table.render({
+	        elem: '#test'
+	        ,url:"{:cmf_url('AdminDelivery/ajaxorderlist')}"
+	        ,toolbar:"#test-table-totalRow-toolbarDemo"
+	        ,cols: [[
+	          {field:'delivery_id', type: 'checkbox'}
+	          ,{field:'delivery_id', width:80, title: 'ID', sort: true}
+	          ,{field:'order_sn', title: '订单编号'}
+	          ,{field:'consignee', width:110, title: '收货人'}
+	          ,{field:'mobile', width:120, title: '手机'}
+	          ,{field:'refund_fee',width:110, title: '退款金额',sort: true}
+	          ,{field:'order_status', width:110, title: '订单状态', sort: true,templet: "#buttonTpl",}
+	          ,{field:'user_note',width:110, title: '退款原因'}
+	          ,{field:'add_time',  width:130,title: '申请时间', sort: true}
+	          ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
+	        ]]
+	        ,id: 'testReload'
+	        ,page: true
+	      });
+
+	        //监听行工具事件
+	        table.on('tool(test)', function(obj){
+
+	            var data = obj.data;
+
+	            if(obj.event === 'del'){
+	                layer.confirm('真的删除行么', function(index){
+
+	                    $.ajax({
+	                        type: "get",
+	                        url: "{:cmf_url('AdminDelivery/delete')}",
+	                        data: {"id": obj.data.order_id},
+	                        dataType: "json",
+	                        success: function(data) {
+	                        	if(data.code == 1){
+		                            obj.del();
+		                            layer.close(index);
+	                        	}else{
+	                        		layer.msg(data.msg);
+	                        	}
+	                        }
+	                    });
+	                });
+	            } else if(obj.event === 'edit'){
+	                var id = obj.data.order_id
+	                var href = "{:cmf_url('AdminDelivery/detail')}?order_id="+id
+	                window.location.href = href
+	            }
+	        });
+	        //监听搜索
+		    form.on('submit(LAY-app-order-search)', function(data){
+		      var field = data.field;
+		      
+		      //执行重载
+		      table.reload('testReload', {
+		        where: field
+		      });
+		    });
+	    });
+	</script>
+	<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+
+</body>
+</html>

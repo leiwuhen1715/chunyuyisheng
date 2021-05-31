@@ -1,0 +1,44 @@
+<include file="public@header"/>
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <include file="public/_nav" active="module"/>
+        </ul>
+
+        <form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:cmf_plugin_url('Modules://AdminIndex/addPost')}">
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-required">*</span>模块名称:</label>
+                <div class="col-md-6 col-sm-10">
+                    <label>
+                        <input type="hidden" class="form-control" name="module[name]" value="{$module['name']}">
+                        {$module['name']}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-required">*</span>模块拼音:</label>
+                <div class="col-md-6 col-sm-10">
+                    <label>
+                        <input type="hidden" class="form-control" name="module[pinyin]" value="{$module['pinyin']}">
+                        {$module['pinyin']}
+                    </label>
+                </div>
+            </div>
+            <input type="hidden" class="form-control" name="module[remark]" value="{$module['remark']}">
+            <input type="hidden" class="form-control" name="module[is_category]" value="{$module['is_category']}">
+            <input type="hidden" class="form-control" name="module[cate_level]" value="{$module['cate_level']}">
+            <input type="hidden" class="form-control" name="module[is_del]" value="{$module['is_del']}">
+            <input type="hidden" name="module[version]" value="1"/>
+            <include file="admin_index/_fastadd" />
+
+            <div class="navbar navbar-fixed-bottom" style="margin-left: 15px;max-width: 200px;">
+                <button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+                <a class="btn btn-default" href="javascript:history.go(-1)">返回上一步</a>
+            </div>
+        </form>
+
+    </div>
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

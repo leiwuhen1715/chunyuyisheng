@@ -1,0 +1,84 @@
+<include file="public@new_header"/>
+</head>
+<body>
+
+    <div class="layui-fluid">
+        
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li><a href="{:cmf_url('adminCoupon/index')}">用户优惠劵</a></li>
+                    <li class="layui-this"><a>添加优惠券</a></li>
+                    <li><a href="{:url('adminCoupon/couponType')}">优惠劵类型</a></li>
+                </ul>
+            </div>
+          <form action="{:url('adminCoupon/addUserCoupon')}" class="layui-form js-ajax-form" method="post">
+          <div class="layui-card-body layui-row" style="padding: 15px;">
+            <div class="layui-tab ">
+                
+                <div class='layui-col-md6'>
+                    <div class="layui-tab-item layui-show">
+                      
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">用户</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="js-categories-name-input" placeholder="请选择用户" class="layui-input" readonly onclick="doSelectCategory()">
+							<input type="hidden" name='user_id' id='js-categories-id-input'>
+                        </div>
+                      </div>
+                      
+                      <div class="layui-form-item">
+                        <label class="layui-form-label">优惠券</label>
+                        <div class="layui-input-block">
+                            <select name='id'>
+                                <foreach name='list' item='vo'>
+                                    <option value='{$vo.id}'>{$vo.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="layui-form-item">
+                          <div class="layui-input-block">
+                            <button class="layui-btn js-ajax-submit" >立即提交</button>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            
+          </div>
+          </form>
+        </div>
+    </div>
+    <include file="public@scripts"/>
+    <script src="__STATIC__/js/layui/layui.js"></script>
+    <script>
+        layui.use(['form'], function(){
+          var form = layui.form
+        })
+    </script>
+    <script type="text/javascript">
+	    function doSelectCategory() {
+	        var selectedCategoriesId = $('#js-categories-id-input').val();
+	        openIframeLayer("{:url('User/adminCapital/select')}?ids=" + selectedCategoriesId, '请选择用户', {
+	            area: ['770px', '500px'],
+	            btn: ['确定', '取消'],
+	            yes: function (index, layero) {
+	                //do something
+
+	                var iframeWin          = window[layero.find('iframe')[0]['name']];
+	                var selectedCategories = iframeWin.confirm();
+	                if (selectedCategories.selectedCategoriesId.length == 0) {
+	                    layer.msg('请选择用户');
+	                    return;
+	                }
+	                $('#js-categories-id-input').val(selectedCategories.selectedCategoriesId.join(','));
+	                $('#js-categories-name-input').val(selectedCategories.selectedCategoriesName.join(' '));
+	                //console.log(layer.getFrameIndex(index));
+	                layer.close(index); //如果设定了yes回调，需进行手工关闭
+	            }
+	        });
+	    }
+	</script>
+</body>
+</html>

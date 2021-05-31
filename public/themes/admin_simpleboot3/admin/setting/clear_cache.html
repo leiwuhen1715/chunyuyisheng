@@ -1,0 +1,50 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="panel panel-primary" style="margin-top: 10%">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{:lang('CACHE_CLEARED')}</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="line-height: 60px;">
+                        {:lang('CACHE_CLEARED')}
+                    </div>
+                    <!-- <div>
+                        <a href="javascript:close_app();" class="btn btn-primary pull-right">{:lang('CLOSE')}</a>
+                        <div class="clearfix"></div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+<script>
+    /*var closeTimeout = setTimeout(function () {
+        parent.close_current_app();
+    }, 3000);
+
+    function close_app() {
+        var if_id = self.frameElement.getAttribute('id');
+        // /alert(if_id)
+        var obj_a = $(".mt-nav-tab[data-id="+if_id+"]").next('i').click();
+        console.log(obj_a)
+
+
+    }
+    var if_id = self.frameElement.getAttribute('id');
+    var closeTimeout = setTimeout(function () {
+        parent.close_current_app(if_id);
+    }, 3000);
+
+    function close_app() {
+        clearTimeout(closeTimeout);
+        parent.close_current_app(if_id);
+    }
+    */
+</script>
+</body>
+</html>

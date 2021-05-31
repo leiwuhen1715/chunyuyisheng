@@ -1,0 +1,65 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('Modules://AdminIndex/index')}">模型</a></li>
+        <li class="active" ><a>编辑模块</a></li>
+        <div class="col-sm-8 text-right">
+            <a class="btn btn-success" href="{:cmf_plugin_url('Modules://AdminIndex/add')}">+ 添加一个模块</a>
+        </div>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:cmf_plugin_url('Modules://AdminIndex/editPost')}">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>名称:</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="hidden" name="id" value="{$data.id}">
+                <input type="text" class="form-control" name="name" value="{$data.name}">
+                <input type="hidden" value="{$data.name}" name="old_name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required"></span>拼音(不可修改):</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="pinyin" value="{$data.pinyin}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>启动栏目:</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="radio" value='1' name='is_category' <eq name='data.is_category' value='1'>checked</eq>> &nbsp; 是 &nbsp;
+                <input type="radio" value='0' name='is_category' <eq name='data.is_category' value='0'>checked</eq>> &nbsp; 否 &nbsp;
+            </div>
+        </div>
+        <div class="form-group">
+                <label class="col-sm-2 control-label">栏目级别:</label>
+                <div class="col-md-6 col-sm-10">
+                    <input type="number" class="form-control" name="cate_level" value="{$data.cate_level}"
+                           placeholder=''>
+                </div>
+            </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>删除:</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="radio" value='1' name='is_del' <eq name='data.is_del' value='1'>checked</eq>> &nbsp; 是 &nbsp;
+                <input type="radio" value='0' name='is_del' <eq name='data.is_del' value='0'>checked</eq>> &nbsp; 否 &nbsp;
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">备注:</label>
+            <div class="col-md-6 col-sm-10">
+                <textarea class="form-control" name="remark" >{$data.remark}</textarea>
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary   js-ajax-submit">{:lang("SAVE")}</button>
+            <a class="btn btn-default" href="{:cmf_plugin_url('Modules://AdminIndex/index')}">返回</a>
+        </div>
+    </form>
+
+</div>
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

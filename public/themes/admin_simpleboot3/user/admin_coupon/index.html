@@ -1,0 +1,104 @@
+<include file="public@new_header"/>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this"><a>用户优惠劵</a></li>
+                <li><a href="{:cmf_url('adminCoupon/addUserCoupon')}" target="_self">添加优惠劵</a></li>
+                <li><a href="{:cmf_url('adminCoupon/couponType')}" target="_self">优惠劵类型</a></li>
+                
+              </ul>
+            </div>
+            <div class="card-body js-check-wrap">
+                <form class="layui-form form-inline margin-top-20" method="get" action="{:url('user/adminCoupon/index')}">
+                    <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto">
+                      搜索：
+                      <div class="layui-inline">
+                        <input type="text" class="layui-input" name='keyword'
+                             value="{:input('request.keyword')}" placeholder="用户名/昵称/手机">
+                      </div>
+                      <div class="layui-inline">
+                        <select name='is_use'  class="layui-input">
+                            <option value="">请选择</option>
+                            <option value="0">未使用</option>
+                            <option value="1">已使用</option>
+                        </select>
+                      </div>
+
+                      <button type='submit' class="layui-btn">搜索</button>
+                    </div>
+                </form>
+
+              <div class="layui-card-body table-responsive">
+                <form method="post" class="js-ajax-form" action="">
+                    <table class="layui-table" style="margin: 0">
+                        <thead>
+                            <tr>
+                                <th>用户</th>
+                                <th>{:lang('AVATAR')}</th>
+                                <th>优惠券</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>兑换时间</th>
+                                <th>到期时间</th>
+                                <th>金额</th>
+                                <th>{:lang('STATUS')}</th>
+                                <th>{:lang('ACTIONS')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <foreach name="list" item="vo">
+                                <tr>
+                                    <td>{$vo['user_nickname']}</td>
+                                    <td><img width="25" height="25" src="{:url('user/public/avatar',array('id'=>$vo['user_id']))}"/></td>
+                                    <td>{$vo.name}</td>
+                                    <td>
+                                        <switch name="vo.type">
+                                            <case value="0">
+                                                <span class="label label-danger">极速问诊</span>
+                                            </case>
+                                            <case value="1">
+                                                <span class="label label-success">商城</span>
+                                            </case>
+                                        </switch>
+                                    </td>
+                                    <td>{$vo.remark}</td>
+                                    <td>{:date('Y-m-d H:i',$vo.start_time)}</td>
+                                    <td>{:date('Y-m-d H:i',$vo.end_time)}</td>
+                                    <td>{$vo.amount}</td>
+                                    <td>
+                                        <switch name="vo.is_use">
+                                            <case value="0">
+                                                <span class="label label-danger">未使用</span>
+                                            </case>
+                                            <case value="1">
+                                                <span class="label label-success">已使用</span>
+                                            </case>
+                                        </switch>
+                                    </td>
+                                    <td>
+
+
+                                    </td>
+                                </tr>
+                            </foreach>
+                        </tbody>
+                    </table>
+                    <ul class='pagination'>{$page}</ul>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="__STATIC__/js/admin.js"></script>
+    <script src="__STATIC__/js/layui/layui.js"></script>
+    <script>
+        layui.use(['form'], function(){
+          var form = layui.form;
+        })
+    </script>
+</body>
+</html>

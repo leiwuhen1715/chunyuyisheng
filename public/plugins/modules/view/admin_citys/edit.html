@@ -1,0 +1,133 @@
+<include file="public/header"/>
+<style type="text/css">
+    .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+         position: absolute;
+         margin-left: 0px;
+     }
+    .radio label, .checkbox label {
+          padding-left: 0px;
+          margin-right: 25px;
+      }
+</style>
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+              
+                <div class="container-fluid">
+                
+                    <div class="row">
+                       <div class="col-md-12">
+                            <div class="card">
+                        <div class="wrap js-check-wrap">
+                            <ul class="nav nav-tabs">
+                                <li ><a href="{:cmf_plugin_url('Modules://AdminCitys/index')}">城市资源</a></li>
+                                <li class="active"><a href="#">编辑城市</a></li>
+                                <div class="col-sm-8 text-right">
+                                    <a class="btn btn-success" href="{:cmf_plugin_url('Modules://AdminCitys/add')}">+ 添加城市</a>
+                                </div>
+                            </ul>
+                            <form action="{:cmf_plugin_url('Modules://AdminCitys/editPost')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th width="165px;">ID<span class="form-required">*</span></th>
+                                                <td>
+                                                    <input type="hidden" name="oid" value="{$data.id}">
+                                                    <input type="hidden" name="referer" value="{$referer}">
+                                                    <input class="form-control" type="text" name="post[id]" style="width: 100px"
+                                                           required
+                                                           value="{$data.id}" placeholder="城市ID"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>城市编码</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[code]" style="width: 150px"
+                                                           value="{$data.code}" placeholder="国家统计局城市编码"/>
+                                                    <p class="help-block"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>上级城市ID</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[pid]" style="width: 100px"
+                                                           value="{$data['pid']}" placeholder="上级城市ID">
+                                                    <p class="help-block"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>级别</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[level]" style="width: 150px"
+                                                           value="{$data['level']}" placeholder="level">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>拼音</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[pinyin]" style="width: 150px"
+                                                           value="{$data['pinyin']}" placeholder="pinyin">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>简称</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[name]" style="width: 120px"
+                                                           value="{$data['name']}" placeholder="简称">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>名称后缀</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[areaname]" style="width: 100px"
+                                                           value="{$data['areaname']}" placeholder="名称后缀">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>纬度</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[lat]" style="width: 150px"
+                                                           value="{$data['lat']}" placeholder="纬度">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>经度</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[lng]" style="width: 150px"
+                                                           value="{$data['lng']}" placeholder="全名">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>三级城市级别</th>
+                                                <td>
+                                                    <input class="form-control" type="text" name="post[level3]" style="width: 150px"
+                                                           value="{$data['level3']}" placeholder="1-5数字">
+                                                    <p class="help-block">1是直辖市，2是省会行政中心，3是有分区的大城市，4是县城，5是城区</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                                                <a class="btn btn-default" href="javascript:history.back();">{:lang('BACK')}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

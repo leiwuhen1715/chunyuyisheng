@@ -1,0 +1,141 @@
+<include file="public/header"/>
+<style>
+    .container{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .col-md-2{
+        width: 100%;
+    }
+    .nav-tabs{
+        margin: 10px
+    }
+    .nav-tabs li{
+        display: inline-block;
+    }
+    .col-md-10{
+        width: 100%
+    }
+    .col-sm-2{
+        width: 10%
+    }
+    .col-sm-10{
+        width: 89%
+    }
+</style>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <!-- 内容导航 -->
+                            <ul class="nav nav-tabs">
+
+                                <foreach name="allTables" key="table" item="field">
+                                    <php>if($field['relate_level']==1) continue;</php>
+                                    <li <if condition="($table_name eq $table) and ($field['relate_level'] gt 0)">class="active"</if>>
+                                        <a href="{:cmf_plugin_url('Modules://Content/index',['modules_id'=>$modules_id, 'table_name'=>$table])}" alt="{$field['remark']}">{$field['remark']}</a>
+                                    </li>
+                                    <if condition="empty($field['pinyin'])">
+                                        <li <if condition="$table_name eq $table && $act eq 'add'">class="active"</if> ><a href="{:cmf_plugin_url('Modules://Content/edit',['modules_id'=>$modules_id,'table_name'=>$table])}">添加内容</a></li>
+                                    </if>
+                                    <if condition="$act eq 'edit'">
+                                        <li class="active" ><a href="javascript:;">编辑内容</a></li>
+                                    </if>
+                                </foreach>
+                                <eq name='modeles_date.is_category' value='1'>
+                                    <li><a href="{:cmf_plugin_url('Modules://admin_column/index',['modules_id'=>$modules_id])}">分类管理</a></li>
+                                </eq>
+
+                            </ul>
+
+                            <form action="{:cmf_plugin_url('Modules://content/editPost')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+                                <input type="hidden" name="modules_id" value="{$modules_id}">
+                                <input type="hidden" name="table_name" value="{$table_name}">
+                                <if condition="isset($id)"><input type="hidden" name="id" value="{$id}"></if>
+                                <!--if condition="$is_main_table">
+                                    <div class="col-md-2 tabbable tabs-left">
+
+                                        <ul class="nav nav-tabs nav-pills nav-stacked" role="tablist">
+                                            <foreach name="allTables" key="table" item="field">
+                                                <if condition="empty($field['pinyin'])">
+                                                    <li class="nav-item <php>if(empty($tables[$table]['pinyin'])) echo 'active';</php>">
+                                                        <a class="nav-link" data-toggle="tab" href="#tab-{$table}">{$field['remark']}</a>
+                                                    </li>
+                                                <elseif condition="$field['relate_level'] eq 1">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="tab" href="#tab-{$table}">{$field['remark']}</a>
+                                                    </li>
+                                                </if>
+                                            </foreach>
+                                        </ul>
+                                    </div>
+                                </if-->
+
+                                <div class="row">
+
+                                    <div class="col-md-10">
+                                        <div class="tab-content">
+                                            <php>\plugins\modules\lib\EditForm::init($allFieldName, $content, "__STATIC__");</php>
+                                            <!--php>if($table==$table_name) echo 'active';</php-->
+                                            <foreach name="setFields" key="table" item="control_edit">
+                                                <div id="tab-{$table}" class="tab-pane active" >
+                                                    <if condition="!empty($control_edit)">
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <!-- 这里是动态配置左边内容 -->
+                                                                <php>
+                                                                    if(is_array($control_edit))
+                                                                    foreach($control_edit as $k=>$v){
+                                                                        if(!isset($v['position']) || $v['position']!='right'){
+                                                                            \plugins\modules\lib\EditForm::start($v,$table);
+                                                                        }
+                                                                    }
+                                                                </php>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <table class="table table-bordered">
+                                                                <!-- 这里是动态配置右边内容-->
+                                                                <php>
+                                                                    if(is_array($control_edit))
+                                                                        foreach($control_edit as $k=>$v){
+                                                                        if(isset($v['position']) && $v['position']=='right'){
+                                                                            \plugins\modules\lib\EditForm::start($v,$table);
+                                                                        }
+                                                                    }
+                                                                </php>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    <else />
+                                                        <!--未配置任何字段!-->
+                                                    </if>
+                                                </div>
+                                            </foreach><!--allFields  end-->
+                                        </div><!-- tab-content && Tab panes end-->
+                                    </div><!--col-md-10  end-->
+                                </div>
+
+                                <br/><br/>
+                                <div class="navbar navbar-fixed-bottom" style="margin-left: 15px;">
+                                        <button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+                                        <a class="btn btn-default" href="{:cmf_plugin_url('Modules://content/index',['modules_id'=>$modules_id])}">返回</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

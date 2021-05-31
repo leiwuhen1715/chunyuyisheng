@@ -1,0 +1,120 @@
+<include file="public@new_header"/>
+<link href="__TMPL__/public/assets/simpleboot3/css/theme.min.css" rel="stylesheet">
+<link href="__TMPL__/public/assets/simpleboot3/css/style.css" rel="stylesheet">
+<style type="text/css">
+	body{line-height:30px;}
+	td, th{padding:6px;}
+</style>
+</head>
+<body>
+	<div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li>
+                  <a href="{:url('AdminOrder/index')}">订单列表</a>
+                </li>
+                <li class="layui-this">
+                  <a>订单发货</a>
+                </li>
+              </ul>
+            </div>
+			<div class="wrap js-check-wrap" style='padding: 5px 10px'>
+				
+				<div class="order-box">
+					<form class="js-ajax-form" action="" method="post">
+						<h4 class="well">基本信息</h4>
+						<table style="width:100%;" border="0" cellspacing="1" cellpadding="6">
+							<tr>
+								<th align="right" width=300>订单号：</th>
+								<td>{$order.order_sn}</td>
+								<th align="right" width=300>下单时间：</th>
+								<td>{:date('Y-m-d H:i',$order.add_time)}</td>
+							</tr>
+							<tr>
+								<th align="right" width=300>收货人：</th>
+								<td>{$order.consignee}</td>
+								<th align="right" width=300>联系电话：</th>
+								<td>{$order.mobile}</td>
+							</tr>
+							<tr>
+								<th align="right" width=300>收货地址：</th>
+								<td colspan=3>{$order.address}</td>					
+							</tr>
+							<tr>
+								<th align="right" width=300>配送物流：</th>
+								<td>
+									<select name='shipping_id' lay-search="">
+										<option value="0">请选择</option>
+										<foreach name='ship_list' item='vo'>
+											<option value="{$vo.id}">{$vo.name}</option>
+										</foreach>
+									</select>
+								</td>
+								<th align="right" width=300>快递单号：</th>
+								<td><input type="text" name="delivery_no" placeholder="请输入快递单号" style="margin:0;" /></td>
+							</tr>
+							<tr>
+								
+							</tr>
+						</table>
+						
+						<h4 class="well">商品信息</h4>
+						<table style="width:100%;" border="0" cellspacing="1" cellpadding="6">
+							<tr>
+								<th>商品名称</th>
+								<th>商品规格</th>
+								<th>数量</th>
+								<th>商品单价</th>
+								<th>商品小计</th>
+							</tr>
+							<foreach name="goods_order" item="vo">
+							<tr>
+								<td align="center">{$vo.goods_name}</td>
+								<td width="250" align="center">{$vo.spec_item_name}</td>
+								<td width="200" align="center">{$vo.goods_num}</td>
+								<td width="200" align="center">¥{$vo.member_goods_price}</td>
+								<td width="200" align="center">¥{$vo.goods_total}</td>
+							</tr>
+							</foreach>
+							<tr>
+								<td colspan=5 align="right" style="padding-right:50px;">合计：¥{$order.goods_price}</td>
+							</tr>
+						</table>
+						<h4 class="well">费用信息</h4>
+						<table style="width:100%;" border="0" cellspacing="1" cellpadding="6">
+							<tr>
+								<td align="center">总计：¥{$order.goods_price}</td>					
+							</tr>
+							<tr>
+								<td align="center">运费：¥{$order.shipping_price}</td>
+							</tr>
+							<tr>
+								<td align="center">应付：¥{$order.order_amount}</td>
+							</tr>
+						</table>
+						<h4 class="well">操作</h4>
+						
+						<table style="width:100%;" border="0" cellspacing="1" cellpadding="6">
+							<tr>
+								<th align="right" width="200">操作备注：</th>
+								<td>
+									<textarea name="note" id="" style="width:500px;height:50px;"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<th align="right" width="200">当前可执行操作：</th>
+								<td>						
+									<button type="submit" class="btn btn-primary js-ajax-submit" data-action="{:url('AdminOrder/ship_info',array('order_id'=>$order['order_id'],'type'=>'confirm_ship'))}" style="margin-right:10px;">确定发货</button>
+									<button type="button" class="btn" onclick="history.back(-1)">返回</button>
+								</td>
+							</tr>
+						</table>
+					</form>			
+				</div>
+			</div>
+		</div>
+    </div>
+	<include file="public@scripts"/>
+</body>
+</html>

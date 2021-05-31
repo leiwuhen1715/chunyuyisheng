@@ -1,0 +1,62 @@
+<include file="public/new_header"/>
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+              
+                <div class="container-fluid">
+                
+                    <div class="row">
+                       <div class="col-md-12">
+                            <div class="card">
+                                
+                                <div class="wrap js-check-wrap">
+                                    <ul class="nav nav-tabs">
+                                        <include file="public/_nav" active="module"/>
+                                        <div class="col-sm-8 text-right">
+                                            <a class="btn btn-success" href="{:cmf_plugin_url('Modules://AdminIndex/add')}">+ 添加一个模块</a>
+                                        </div>
+                                    </ul>
+                                    <form action="" method="post" class="margin-top-20">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="row">
+                                                <th class="col-sm-1">ID</th>
+                                                <th class="col-sm-2">名称</th>
+                                                <th class="col-sm-2">拼音</th>
+                                                <th class="col-sm-2">描述</th>
+                                                <th class="col-sm-5">{:lang('ACTIONS')}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <foreach name="modules" item="vo">
+                                                <tr class="row">
+                                                    <td>{$vo.id}</td>
+                                                    <td><a href="{:cmf_plugin_url('Modules://AdminTables/index',array('modules_id'=>$vo['id'],'modules_name'=>urlencode($vo['name'])))}">{$vo.name}</a></td>
+                                                    <td>{$vo.pinyin}</td>
+                                                    <td>{$vo.remark}</td>
+                                                    <td>
+                                                        <a href="{:cmf_plugin_url('Modules://AdminIndex/edit',array('id'=>$vo['id']))}"><b>编辑</b>&nbsp;</a>
+                                                        <a href="{:cmf_plugin_url('Modules://AdminTables/index',array('modules_id'=>$vo['id'],'modules_name'=>urlencode($vo['name'])))}"><b>表管理</b>&nbsp;</a> |
+                                                            <a href="{:cmf_plugin_url('Modules://AdminColumn/index',array('modules_id'=>$vo['id']))}">栏目</a> |
+                                                            <a class="js-ajax-delete" href="{:cmf_plugin_url('Modules://AdminIndex/delete',array('modules_id'=>$vo['id']))}">删除</a> |
+                                                            <a href="{:cmf_plugin_url('Modules://Content/edit',array('modules_id'=>$vo['id']))}">添加数据</a>
+                                                    </td>
+                                                </tr>
+                                            </foreach>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

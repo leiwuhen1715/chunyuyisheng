@@ -1,0 +1,50 @@
+<include file="public/header" />
+<block name="headerjs"></block>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <div class="wrap js-check-wrap">
+                                <ul class="nav nav-tabs">
+                                    <include file="public/cate_nav" active="column"/>
+                                    <div class="col-sm-8 text-right">
+                                        <a class="btn btn-success" href="{:cmf_plugin_url('Modules://AdminColumn/add',array('modules_id'=>$modules_id))}">+ 添加栏目</a>
+                                    </div>
+                                </ul>
+
+                                <div class="card-body">
+                                    <!-- <div class="col-md-2 tabbable tabs-left">
+
+                                        <ul class="nav nav-tabs nav-pills nav-stacked" role="tablist">
+                                            <volist name="authmodules" id="vo">
+                                                <li <if condition="$vo['id'] eq $modules_id">class="active"</if> >
+                                                <a  href="{:cmf_plugin_url('Modules://AdminColumn/index',array('modules_id'=>$vo['id']))}"> {$vo.name}</a>
+                                                </li>
+                                            </volist>
+                                        </ul>
+                                    </div> -->
+
+                                    
+                                    <block name="form"></block>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+<block name="footerjs"></block>
+</body>
+</html>

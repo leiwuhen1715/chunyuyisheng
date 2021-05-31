@@ -1,0 +1,161 @@
+<include file="public/header"/>
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+              
+                <div class="container-fluid">
+                
+                    <div class="row">
+                       <div class="col-md-12">
+                            <div class="card">
+                                <div class="wrap js-check-wrap">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="{:cmf_plugin_url('Modules://AdminCitys/index')}">城市资源</a></li>
+                                        <div class="col-sm-8 text-right">
+                                            <a class="btn btn-success" href="{:cmf_plugin_url('Modules://AdminCitys/add')}">+ 添加城市</a>
+                                        </div>
+                                    </ul>
+                                
+                                    <form class="well form-inline margin-top-20" id="city-form" method="get" action="{:cmf_plugin_url('Modules://AdminCitys/index')}">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                ID：&nbsp;&nbsp; <input type="text" class="form-control" name="id" style="width: 100px;"  value="{$id|default=''}" placeholder="请输入ID">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                简称：&nbsp;&nbsp; <input type="text" class="form-control" name="name" style="width: 120px;" value="{$name|default=''}" placeholder="请输入简称">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                父级ID：&nbsp;&nbsp; <input type="text" class="form-control" name="pid" style="width: 100px;" value="{$pid|default=''}" placeholder="PID">
+                                            </div>
+                                        </div>
+                                        <hr style="margin: 5px"/>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                级别：&nbsp;&nbsp; <input type="text" class="form-control" name="level" style="width: 100px;" value="{$level|default=''}" placeholder="LEVEL">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                拼音：&nbsp;&nbsp; <input type="text" class="form-control" name="pinyin" style="width: 100px;" value="{$pinyin|default=''}" placeholder="拼音">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-primary">搜索</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- 搜索结束 -->
+                                
+                                
+                                    <form class="js-ajax-form" method="post" id="js-ajax-form">
+                                        <table class="table table-hover table-bordered table-list">
+                                            <thead>
+                                            <tr>
+                                                <th width="16">
+                                                    <label>
+                                                        <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                                                    </label>
+                                                </th>
+                                                <th>ID</th>
+                                                <th>父ID</th>
+                                                <th>级别</th>
+                                                <th>拼音</th>
+                                                <th>简称</th>
+                                                <th>后缀</th>
+                                                <th>三级级别</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <php>$status=array("1"=>'正常',"0"=>'隐藏');</php>
+                                            <foreach name="data" item="v">
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                                                               value="{$v.id}">
+                                                    </td>
+                                                    <td align="center">{$v['id']}</td>
+                                                    <td align="center">{$v['pid']}</td>
+                                                    <td align="center">{$v['level']}</td>
+                                                    <td align="center">{$v['pinyin']}</td>
+                                                    <td align="center"><a class="getcitys" data-pid="{$v.id}">{$v['name']}</a> </td>
+                                                    <td align="center">{$v['areaname']}</td>
+                                                    <td align="center">{:isset($level3[$v['level3']])?$level3[$v['level3']]:''}</td>
+                                                    <td>
+                                                        <eq name="v.is_hot" value='1'>
+                                                                <a class="btn btn-xs btn-success js-ajax-dialog-btn"
+                                                                   href="{:cmf_plugin_url('Modules://AdminCitys/hot',array('id'=>$v['id'],'is_hot'=>0))}"
+                                                                   data-msg="取消热门？">取消</a>
+                                                                <else/>
+                                                                <a class="btn btn-xs btn-warning js-ajax-dialog-btn"
+                                                                   href="{:cmf_plugin_url('Modules://AdminCitys/hot',array('id'=>$v['id'],'is_hot'=>1))}"
+                                                                   data-msg="设为热门城市？">热门</a>
+                                                </eq>
+                                                        <a href="{:cmf_plugin_url('Modules://AdminCitys/edit',array('id'=>$v['id']))}">{:lang('EDIT')}</a> |
+                                                        <a href="{:cmf_plugin_url('Modules://AdminCitys/delete',array('id'=>$v['id']))}" class="js-ajax-delete">{:lang('DELETE')}</a>
+                                                    </td>
+                                                </tr>
+                                            </foreach>
+                                        </table>
+                                        <div class="table-actions">
+                                            <label>
+                                                <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                                            </label>
+                                            <button class="btn btn-info btn-sm" type="button" id="level3" data-action="{:cmf_plugin_url('Modules://AdminCitys/setLevel3')}">
+                                                三级城市属性设置
+                                            </button>
+                                            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('Modules://AdminCitys/delete')}"
+                                                    data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+                                            </button>
+                                        </div>
+                                        <div class="pagination">{$page}</div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+
+<script>
+    $('#level3').on('click',function(){
+            layer.ready(function(){
+                layer.msg('三级城市属性设置<br><font size="1">说明：1是直辖市，2是省会行政中心，3是有分区的大城市,<br/>4是县城和非市内城区, &nbsp;5是城区</font>', {
+                    time: 10000, //10s后自动关闭
+                    area: '400px',
+                    btn: ['0', '1', '2', '3', '4', '5','取消'],
+                    btn1:function(){setLevel3(0);},
+                    btn2:function(){setLevel3(1);},
+                    btn3:function(){setLevel3(2);},
+                    btn4:function(){setLevel3(3);},
+                    btn5:function(){setLevel3(4);},
+                    btn6:function(){setLevel3(5);},
+                    btn7:function(){return 1;}
+                });
+            });
+    });
+
+    function setLevel3( level3 ){
+        $.ajax({
+            url: "setLevel3?level3="+level3,
+            type: 'post',
+            data:$('#js-ajax-form').serialize(),
+            success: function(data){
+                layer.msg(data.msg, {time: 1000, icon:1});
+                setTimeout(function () {
+                    location.href = data.url;
+                }, 1000);
+            }
+        });
+    }
+    $(".getcitys").on("click",function () {
+        var pid = $(this).attr('data-pid');
+        $("input[name='pid']").val(pid);
+        $("#city-form").submit();
+    });
+</script>
+
+</body>
+</html>

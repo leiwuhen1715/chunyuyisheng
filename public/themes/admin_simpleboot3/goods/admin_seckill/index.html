@@ -1,0 +1,188 @@
+<include file="public@new_header"/>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <a href="{:cmf_url('adminSeckill/index')}">秒杀列表</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body js-check-wrap">
+              <form class="layui-form form-inline margin-top-20" method="post" action="{:cmf_url('AdminGoods/daochu')}">
+                <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto" style='margin-bottom: 10px'>
+                  搜索：
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="title" name='title'
+                         value="" placeholder="标题">
+                  </div>
+                  <div class="layui-inline">
+                   <select  class="layui-input" name="status" id="status">
+                       <option value="">秒杀状态</option>
+                       <option value="1">开启</option>
+                       <option value="0">关闭</option>
+                   </select>
+                  </div>
+
+                  <div class="layui-inline">
+                    <input type="text" id='date' class="layui-input" name="start_time" placeholder="开始时间" value="{$start_time|default=''}" autocomplete="off">
+                  </div>-
+                  <div class="layui-inline">
+                    <input type="text"  id='date1' class="layui-input" name="end_time"  placeholder="结束时间"  value="{$end_time|default=''}" autocomplete="off">
+                  </div>
+                  <button type='button' class="layui-btn" lay-submit lay-filter="LAY-app-order-search">搜索</button>
+              </div>
+
+              <div class="layui-card-body table-responsive">
+                  <table class="layui-hide" id="test" lay-filter="test"></table>
+              </div>
+              </form>
+            </div>
+        </div>
+    </div>
+
+
+<script src="__STATIC__/js/layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="switchTpl">
+  <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="开启|关闭" lay-filter="sexDemo" {{ d.is_on_sale == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="switchTpl1">
+  <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="开启|关闭" lay-filter="sexDemo1" {{ d.is_recommend == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="test-table-totalRow-toolbarDemo">
+  <div class="layui-btn-container">
+    <button type='button' class="layui-btn layui-btn-sm" lay-event="getCheckData">删除</button>
+  </div>
+</script>
+<script>
+
+    layui.use(['form','table','laydate'], function(){
+      var form = layui.form
+      ,layer = layui.layer
+      ,table = layui.table
+      ,laydate = layui.laydate;
+
+      //日期
+      laydate.render({
+        elem: '#date'
+      });
+      laydate.render({
+        elem: '#date1'
+      });
+      table.render({
+        elem: '#test'
+        ,url:"{:cmf_url('adminSeckill/ajax')}"
+        ,toolbar:"#test-table-totalRow-toolbarDemo"
+        ,cols: [[
+          {field:'id', type: 'checkbox'}
+          ,{field:'id', width:80, title: 'ID', sort: true}
+          ,{field:'goods_name', title: '活动标题'}
+          ,{field:'ot_price', width:110, title: '原价'}
+          ,{field:'shop_price',width:110, title: '秒杀价',sort: true}
+          ,{field:'store_count', width:110, title: '库存', sort: true}
+          ,{field:'start_time',  width:180,title: '开始时间', sort: true}
+          ,{field:'end_time',  width:180,title: '结束时间', sort: true}
+          ,{field:'is_recommend',  title: '推荐',width:100, templet: '#switchTpl1', unresize: true}
+          ,{field:'is_on_sale',  title: '状态',width:100, templet: '#switchTpl', unresize: true}
+		  ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+        ]]
+        ,id: 'testReload'
+        ,page: true
+      });
+
+		//监听性别操作
+		form.on('switch(sexDemo)', function(obj){
+
+			if(obj.elem.checked){
+				var status = 1
+			}else{
+				var status = 0
+			}
+			$.ajax({
+          type: "get",
+          url: "{:cmf_url('adminSeckill/status')}",
+          data: {"id": this.value,"value":status},
+          dataType: "json",
+          success: function(data) {
+
+          }
+      });
+
+		});
+    //监听性别操作
+    form.on('switch(sexDemo1)', function(obj){
+
+        var values = obj.elem.checked?1:0;
+        $.ajax({
+            type: "post",
+            url: "{:cmf_url('adminSeckill/status')}",
+            data: {id: this.value,field:'is_recommend',value:values},
+            dataType: "json",
+            success: function(data) {
+
+            }
+        });
+    });
+		//头工具栏事件
+	    table.on('toolbar(test)', function(obj){
+	      var checkStatus = table.checkStatus(obj.config.id);
+	      console.log(obj)
+	      switch(obj.event){
+	        case 'getCheckData':
+	          var data = checkStatus.data;
+	          layer.alert(JSON.stringify(data));
+	        break;
+	        case 'getCheckLength':
+	          var data = checkStatus.data;
+	          layer.msg('选中了：'+ data.length + ' 个');
+	        break;
+	        case 'isAll':
+	          layer.msg(checkStatus.isAll ? '全选': '未全选');
+	        break;
+	      };
+	    });
+  		//监听行工具事件
+  		table.on('tool(test)', function(obj){
+
+  		    var data = obj.data;
+
+  		    if(obj.event === 'del'){
+  		      	layer.confirm('真的删除行么', function(index){
+
+  				  	$.ajax({
+    	                  	type: "get",
+    	                  	url: "{:cmf_url('adminSeckill/delete')}",
+    	                  	data: {"id": obj.data.id},
+    	                  	dataType: "json",
+    	                  	success: function(data) {
+  						  	obj.del();
+  					        layer.close(index);
+    	                  	}
+    	              	});
+  		      	});
+  		    } else if(obj.event === 'edit'){
+  				var id = obj.data.id
+  				var href = "{:cmf_url('AdminSeckill/edit')}?id="+id
+  		      	window.location.href = href
+  		    }
+  		});
+      //监听搜索
+        form.on('submit(LAY-app-order-search)', function(data){
+          var field = data.field;
+          
+          //执行重载
+          table.reload('testReload', {
+            where: field
+          });
+        });	
+    });
+</script>
+</body>
+</html>

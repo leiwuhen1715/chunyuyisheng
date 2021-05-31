@@ -1,0 +1,82 @@
+<include file="public@header"/>
+<style type="text/css">
+    .wrap {padding: 20px}
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <form class="well form-inline margin-top-20" method="get" action="{:cmf_url('adminCapital/select')}">
+         &nbsp;&nbsp;
+        关键字:
+        <input type="text" class="form-control" name="keyword" style="width: 200px;"
+               value="{$keyword|default=''}" placeholder="请输入用户名/昵称/手机...">
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+    </form>
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <tr>
+            <th style="width:50px">
+                <label>
+                </label>
+            </th>
+            <th>会员</th>
+        </tr>
+        </thead>
+        <tbody>
+        <foreach name="datas" item="vo">
+            <tr class="data-item-tr">
+                <td>
+                    <php>$checked = in_array($vo['id'],$selectedIds)?'checked':'';</php>
+                    <input type="radio" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids"
+                           value="{$vo.id}" data-name="{$vo.user_nickname}({$vo.mobile})" {$checked}>
+                </td>
+                <td>{$vo.user_nickname}({$vo.mobile})</td>
+            </tr>
+        </foreach>
+        </tbody>
+    </table>
+    <ul class="pagination">{$page|default=''}</ul>
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    $('.data-item-tr').click(function (e) {
+
+        console.log(e);
+        var $this = $(this);
+        if ($(e.target).is('input')) {
+            return;
+        }
+
+        var $input = $this.find('input');
+        if ($input.is(':checked')) {
+            $input.prop('checked', false);
+        } else {
+            $input.prop('checked', true);
+        }
+    });
+
+    function confirm() {
+        var selectedCategoriesId   = [];
+        var selectedCategoriesName = [];
+        var selectedCategories     = [];
+        $('.js-check:checked').each(function () {
+            var $this = $(this);
+            selectedCategoriesId.push($this.val());
+            selectedCategoriesName.push($this.data('name'));
+
+            selectedCategories.push({
+                id: $this.val(),
+                name: $this.data('name')
+            });
+        });
+
+        return {
+            selectedCategories: selectedCategories,
+            selectedCategoriesId: selectedCategoriesId,
+            selectedCategoriesName: selectedCategoriesName
+        };
+    }
+</script>
+</body>
+</html>

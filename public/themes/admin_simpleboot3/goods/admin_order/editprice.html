@@ -1,0 +1,113 @@
+<include file="public@header"/>
+<link href="__TMPL__/public/assets/simpleboot3/css/theme.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">			
+	        <li class="active"><a href="#">修改费用信息</a></li>			
+	    </ul>
+		<form action="{:U('AdminOrder/editprice')}" method="post" class="form-horizontal js-ajax-form" enctype="multipart/form-data">
+			<input type="hidden" name="order_id" value="{$order.order_id}" />
+			<div class="tabbable">
+		        <div class="tab-content">	          
+						<fieldset>							
+							<div class="control-group">
+								<label class="control-label">总计</label>
+								<div class="controls">
+									<input type="text" value="{$order.goods_price}" readonly style="color:#333;">
+								</div>
+							</div>	
+							<div class="control-group">
+								<label class="control-label">运费</label>
+								<div class="controls">
+									<input type="text" name="shipping_price" readonly value="{$order.shipping_price}">
+								</div>
+							</div>								
+							<div class="control-group">
+								<label class="control-label">应付金额</label>
+								<div class="controls">
+									<input type="text" name="order_amount" value="{$order.order_amount}">
+								</div>
+							</div>
+							
+						</fieldset>	          
+		        </div>
+		    </div>
+			
+		    <div class="form-actions">
+		     	<button class="btn btn-primary js-ajax-submit"type="submit">{:L('SAVE')}</button>
+		      	<a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+		    </div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+	<script>
+		/**
+		 * 获取城市
+		 * @param t  省份select对象
+		 */
+		function get_city(t){
+			var parent_id = $(t).val();
+			if(!parent_id > 0){
+				return;
+			}
+			$('#twon').empty().css('display','none');
+			var url = '/index.php?g=User&m=address&a=getRegion&level=2&parent_id='+ parent_id;
+			$.ajax({
+				type : "GET",
+				url  : url,
+				error: function(request) {
+					alert("服务器繁忙, 请联系管理员!");
+					return;
+				},
+				success: function(v) {
+					v = '<option value="">选择城市</option>'+ v;          
+					$('#city').empty().html(v);
+				}
+			});
+		}
+
+		/**
+		 * 获取地区
+		 * @param t  城市select对象
+		 */
+		function get_area(t){
+			var parent_id = $(t).val();
+			if(!parent_id > 0){
+				return;
+			}
+			var url = '/index.php?g=User&m=address&a=getRegion&level=3&parent_id='+ parent_id;
+			$.ajax({
+				type : "GET",
+				url  : url,
+				error: function(request) {
+					alert("服务器繁忙, 请联系管理员!");
+					return;
+				},
+				success: function(v) {
+					v = '<option value="">选择区域</option>'+ v;
+					$('#district').empty().html(v);
+				}
+			});
+		}
+		// 获取最后一级乡镇
+		function get_twon(obj){
+			var parent_id = $(obj).val();
+			var url = '/index.php?g=User&m=address&a=getTwon&parent_id='+ parent_id;
+			$.ajax({
+				type : "GET",
+				url  : url,
+				success: function(res) {
+					if(parseInt(res) == 0){
+						$('#twon').empty().css('display','none');
+					}else{
+						$('#twon').css('display','block');
+						$('#twon').empty().html(res);
+					}
+				}
+			});
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Demo</title>
+        <script src="__TMPL__/demo/public/assets/js/vue.js"></script>
+        <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+    </head>
+    <body>
+
+        <div id="app">
+            <ol>
+                <li v-for="message in messages">
+                    {{message.message}} -- {{message.post_time}}
+                </li>
+            </ol>
+            <input v-model="message">
+            <button v-on:click="sentMessage">发送</button>
+        </div>
+
+        <script>
+            var client = null;
+            var uid = 2; //当前用户id
+            var tid = 1; //接受消息用户ID
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: '测试信息',
+                    messages: []
+                },
+                methods: {
+                    sentMessage: function() {
+                        if (this.message == null || this.message == "") {
+                            layer.msg('内容为空', {
+                                shade: 0.1,
+                                icon: 2,
+                                time: 600
+                            });
+                            return false;
+                        } else {
+                            var Data = {
+                                content: this.message,
+                                id: 19,
+                                token: '5d71601f07eb596aaeac478fde019e9185e7e720a1915525e27eafe1fce6ec22',
+                            }
+                            
+                            client.send(JSON.stringify(Data));
+                            this.message = '';
+                        }
+                    }
+                }
+            });
+            
+
+            client = new WebSocket("ws://admin.sxqqdzkj.com:9501?id=" + 19+'&token=5d71601f07eb596aaeac478fde019e9185e7e720a1915525e27eafe1fce6ec22');
+
+            client.onopen = function() {
+                layer.msg('服务器连接成功', {
+                    shade: 0.1,
+                    icon: 1,
+                    time: 600
+                });
+            };
+
+            client.onerror = function() {
+                layer.msg('服务器连接失败', {
+                    shade: 0.1,
+                    icon: 2,
+                    time: 600
+                });
+            };
+
+            client.onmessage = function(evt) {
+                var data = JSON.parse(evt.data);
+                console.log(data);
+                //错误提示
+                if (data.status != 1) {
+                    layer.alert(data.msg, {
+                        icon: 2
+                    });
+                    return;
+                }
+                //消息返回
+                if (data.status == 1 && data.data.message != '') {
+                    app.messages.push(data.data);
+                }
+            };
+            client.onclose = function(res) {
+                console.log(res)
+            };
+        </script>
+    </body>
+</html>

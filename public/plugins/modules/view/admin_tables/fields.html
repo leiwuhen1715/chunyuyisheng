@@ -1,0 +1,129 @@
+<include file="public@header"/>
+</head>
+<style>
+input[type="checkbox"]{
+    width: 25px;height: 25px;
+}
+</style>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <include file="public/_nav"/>
+            <li class="active"><a href="{:cmf_plugin_url('Modules://AdminTables/index',['modules_id'=>$modules_id])}">【{$modules_name}】表管理</a></li>
+        </ul>
+
+        <form class="js-ajax-form margin-top-20" action="" method="post">
+            <div class="row" style="margin-bottom: 10px;">
+                <input type="hidden" name="modules_id" value="{$modules_id}"/>
+                <div class="col-sm-4 text-left form-inline">
+                    <label class="control-label">表名：</label>
+                    <input type="text" class="form-control" name="name" value="{$table_name}" disabled="true" style="min-width: 200px;"/>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <a class="btn btn-info"  href="{:cmf_plugin_url('Modules://AdminTables/index',['modules_id'=>$modules_id])}"><i class="fa fa-reply"></i> 返回表管理</a>
+                    <a class="btn btn-success"  href="{:cmf_plugin_url('Modules://AdminControl/index',['modules_id'=>$modules_id,'table_name'=>$table_name])}">-> 去配置</a>
+                </div>
+            </div>
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr class="row">
+                        <th >字段名</th>
+                        <th >类型</th>
+                        <th >默认值</th>
+                        <th >字段注释</th>
+                        <th >可NULL</th>
+                        <th >主键</th>
+                        <th >自增</th>
+                        <th >操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <if condition="isset($fields) && !empty($fields)">
+                <foreach name="fields" item="vo">
+                    <tr class="row" id="edit_field_{$vo['COLUMN_NAME']}" data-json='{:json_encode($vo,JSON_HEX_APOS)}' ondblclick="field_update('edit_field_{$vo[\'COLUMN_NAME\']}')">
+                        <td>{$vo['COLUMN_NAME']}</td>
+                        <td>{$vo['COLUMN_TYPE']}</td>
+                        <td>{$vo['COLUMN_DEFAULT']}</td>
+                        <td>{$vo['COLUMN_COMMENT']}</td>
+                        <td>{:$vo['IS_NULLABLE']=='YES'?'是':'否'}</td>
+                        <td>{:$vo['COLUMN_KEY']=='PRI'?'是':''}</td>
+                        <td>{:$vo['EXTRA']=='auto_increment'?'是':''}</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="field_update('edit_field_{$vo[\'COLUMN_NAME\']}')">{:lang('EDIT')}</a> |
+                            <if condition="$vo['COLUMN_NAME']=='itemid'">
+                                <a class="btn-default" href="javascript:void(0);" title="itemid字段为关联字段，不可删除！" onclick="alert('itemid字段为关联字段，不可删除！')">说明</a>
+                            <else />
+                                <a class="js-ajax-delete" href="{:cmf_plugin_url('Modules://AdminTables/fieldUpdate',array('name'=>$table_name,'field'=>$vo['COLUMN_NAME'],'type'=>'del'))}"
+                                   data-msg="删除字段类型将可能导致数据丢失">删除</a>
+                            </if>
+                        </td>
+                    </tr>
+                </foreach>
+
+                    <!----------动态添加行--------->
+                    <tr><td colspan="12">&nbsp;</td></tr>
+                    <tr class="row" id="add">
+                        <td><input type="text" class="form-control"  name="add[Field]"  placeholder="字段名"></td>
+                        <td><input type="text"  class="form-control" name="add[Type]"  placeholder="类型,格式如：double(6,3)"></td>
+                        <td><input type="text"  class="form-control" name="add[Default]" placeholder="默认值"></td>
+                        <td><input type="text"  class="form-control" name="add[Comment]" placeholder="字段注释"></td>
+                        <td><input type="checkbox" class="form-control"  name="add[Null]"></td>
+                        <td><input type="hidden" class="form-control" name="add[Key]"></td>
+                        <td><input type="hidden" class="form-control" name="add[Extra]"></td>
+                        <td><button class="btn btn-success js-ajax-submit" data-action="{:cmf_plugin_url('Modules://AdminTables/fieldUpdate',array('name'=>$table_name,'type'=>'add'))}">+添加一个字段</button>
+                        </td>
+                    </tr>
+                    <!-----------------动态添加行  end------------->
+
+                </if>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <!-- 温馨提示 -->
+    <div class="alert alert-warning alert-dismissable navbar-fixed-bottom">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>如果该表有id字段且为主键，则与主表对应关系是一对多，反之则为一对一关系！</p>
+    </div>
+
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>
+
+
+<script>
+    var edit_field_id = '';//正在编辑的行ID
+    var edit_field_html = '';//正在编辑的行原内容
+    //点击编辑
+    function field_update( id ){
+        if(edit_field_html!=''){
+            field_update_cancle(edit_field_id);//取消原来正在编辑的行
+        }
+        edit_field_id = id;
+        edit_field_html = $('#'+id).html();//之前的行保存下来
+
+        var data_json = JSON.parse($('#'+id).attr('data-json'));//编辑的数据源
+        var edit_field =
+                '<td><input type="text" class="form-control"  name="edit[Field]" value="'+data_json.COLUMN_NAME+'"  placeholder="字段名"></td>'+
+                '<td><input type="text"  class="form-control" name="edit[Type]"  value="'+data_json.COLUMN_TYPE+'" placeholder="类型,格式如：double(6,3)"></td>'+
+                '<td><input type="text"  class="form-control" name="edit[Default]" value="'+(data_json.COLUMN_DEFAULT==null?"":data_json.COLUMN_DEFAULT)+'" placeholder="默认值"></td>'+
+                '<td><input type="text"  class="form-control" name="edit[Comment]" value="'+data_json.COLUMN_COMMENT+'" placeholder="字段注释"></td>'+
+                '<td><input type="checkbox" class="form-control"  name="edit[Null]" '+ (data_json.IS_NULLABLE=='YES'?"checked=true":"") +'></td>'+
+                '<td><input type="checkbox" class="form-control" name="edit[Key]"  '+ (data_json.COLUMN_KEY=='PRI'?"checked=true":"") +'></td>'+
+                '<td><input type="checkbox" class="form-control" name="edit[Extra]" '+ (data_json.EXTRA=='auto_increment'?"checked=true":"") +'></td>'+
+                '<td><button class="btn btn-success js-ajax-submit" ' +
+                    'data-action="{:cmf_plugin_url(\'Modules://AdminTables/fieldUpdate\', array(\'name\'=>$table_name,\'type\'=>\'edit\'))}" ' +
+                    'data-msg="修改字段类型将可能导致数据丢失">保存</button>' +
+                '<button type="button" class="btn btn-info" onclick="field_update_cancle(\''+id+'\')">取消</button>' +
+                '<input type="hidden"  name="edit[OldField]" value="'+data_json.COLUMN_NAME+'"></td>';
+        $('#'+id).html( edit_field );//替换成编辑的行
+    }
+
+    //取消编辑
+    function field_update_cancle( id ){
+        $('#'+id).html( edit_field_html );
+    }
+
+</script>

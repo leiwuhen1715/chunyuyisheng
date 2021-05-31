@@ -1,0 +1,240 @@
+@media (min-width:768px) {
+  .container {
+    width: 750px
+  }
+}
+
+@media (min-width:992px) {
+  .container {
+    width: 970px
+  }
+}
+
+@media (min-width:1200px) {
+  .container {
+    width: 1170px
+  }
+}
+
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto
+}
+
+.row {
+  margin-right: -15px;
+  margin-left: -15px
+}
+
+.col-sm-4, .col-xs-11 {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  box-sizing: border-box;
+}
+
+.col-xs-11{
+  float: left
+}
+
+
+.col-xs-11 {
+  width: 91.66666667%
+}
+
+
+
+@media (min-width:768px) {
+  .col-sm-4{
+    float: left
+  }
+
+  .col-sm-4 {
+    width: 33.33333333%
+  }
+
+}
+
+
+.my-alert {
+  font-size: 14px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  line-height: initial;
+  height: auto
+}
+
+.my-alert h4 {
+  margin-top: 0;
+  color: inherit;
+}
+
+.my-alert .alert-link {
+  font-weight: 700
+}
+
+.my-alert>p, .my-alert>ul {
+  margin-bottom: 0
+}
+
+.my-alert>p+p {
+  margin-top: 5px
+}
+
+.alert-dismissable, .alert-dismissible {
+  padding-right: 35px
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  color: inherit
+}
+
+.alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6
+}
+
+.alert-success hr {
+  border-top-color: #c9e2b3
+}
+
+.alert-success .alert-link {
+  color: #2b542c
+}
+
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1
+}
+
+.alert-info hr {
+  border-top-color: #a6e1ec
+}
+
+.alert-info .alert-link {
+  color: #245269
+}
+
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc
+}
+
+.alert-warning hr {
+  border-top-color: #f7e1b5
+}
+
+.alert-warning .alert-link {
+  color: #66512c
+}
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1
+}
+
+.alert-danger hr {
+  border-top-color: #e4b9c0
+}
+
+.alert-danger .alert-link {
+  color: #843534
+}
+
+.close {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2
+}
+
+.close:focus, .close:hover {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  filter: alpha(opacity=50);
+  opacity: .5
+}
+
+button.close {
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  width: auto;
+  height: auto
+}
+
+/* 加载动画 */
+#lyear-loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9990;
+  background: rgba(0, 0, 0, 0.0325);
+
+}
+#lyear-loading .spinner-border {
+  z-index: 999999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  font-size: 14px;
+  margin: -15px 0 0 -15px;
+}
+@-webkit-keyframes spinner-border {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-border {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.spinner-border {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  vertical-align: text-bottom;
+  border: 0.125em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: spinner-border .75s linear infinite;
+  animation: spinner-border .75s linear infinite;
+}
+.text-primary {
+    color: #33cabb !important;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+

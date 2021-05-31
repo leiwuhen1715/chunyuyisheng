@@ -1,0 +1,132 @@
+
+<extend name="admin_column/_base" />
+
+<block name="form">
+    <style type="text/css">
+        .form-group1 div{display: inline-block;}
+        .form-group1 label{width: 90px;}
+    </style>
+    <form class="js-ajax-form" action="{:cmf_plugin_url('Modules://AdminColumn/addPost',array('modules_id'=>$modules_id))}" method="post">
+        <div class="tab-content">
+            <div class="tab-pane active" id="A">
+                
+                
+                <notempty name='parent'>
+                        <div class="form-group">
+                            <label for="input-parent"><span class="form-required">*</span>上级</label>
+                            <div>
+                                <input type="hidden" name="parent_save" value="{$parent.id}">
+                                {$parent.name}
+                            </div>
+                        </div>
+                    <else>
+                        <input type="hidden" name="parent_save" value="0">
+                </notempty>
+                
+                <div class="form-group">
+                    <label for="input-name"><span class="form-required">*</span>栏目名称</label>
+                    <div>
+                        <input type="text" class="form-control" id="input-name" name="name">
+                    </div>
+                </div>
+
+                <!--div class="form-group">
+                    <label for="input-alias">栏目别名</label>
+                    <div>
+                        <input type="text" class="form-control" id="input-alias" name="alias">
+                    </div>
+                </div-->
+                <div class="form-group" style="display:none">
+                    <label for="input-modules"><span class="form-required">*</span>绑定模块</label>
+                    <input type="hidden" name="modules_id_save" value="{$modules_id_save}">
+                    <div>
+                        <select class="form-control" name="modules_id" id="input-modules"  {$modules_status}>
+                            <option value="0">请选择</option>
+                            {$modules}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input-keyword">关键字</label>
+                    <div>
+                        <input type="text" class="form-control" id="input-keyword" name="keyword" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input-description">描述</label>
+                    <div>
+                        <textarea class="form-control" name="description" id="input-description"></textarea>
+                    </div>
+                </div>
+                <if condition="$modules_id neq 24">
+                    <div class="form-group">
+                        <label for="photos">缩略图</label>
+                        <div>
+                               <input type="hidden" name="thumbnail" id="thumbnail" value="">
+                                <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                                    <img src="__PLUGIN_TMPL__/public/assets/images/default-thumbnail.png"
+                                         id="thumbnail-preview"
+                                         width="135" style="cursor: pointer"/>
+                                </a>
+                                <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+                        </div>
+                    </div>
+                </if>
+                <div class="form-group"  style="display:none">
+                    <label for="input-order">排序</label>
+                    <div>
+                        <input type="text" class="form-control" name="list_order" id="input-order" value="">
+                    </div>
+                </div>
+                <!--div class="form-group">
+                    <label for="catalog"><span class="form-required">*</span>目录</label>
+                    <div>
+                        <input type="text" class="form-control" name="catalog" id="catalog" value="" placeholder="目录只能输入字母和数字">
+                    </div>
+                </div-->
+                <div class="form-group" style="display:none">
+                    <label for="def_keyword">默认关键词</label>
+                    <div>
+                        <input type="text" class="form-control" name="def_keyword" id="def_keyword" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input-status">状态</label>
+                    <div id="input-status">
+                        <input type="radio"  name="status" value="1" checked> 启用
+                        <input type="radio"  name="status" value="0"> 不启用
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+                <a class="btn btn-default" href="{:cmf_plugin_url('Modules://AdminColumn/index')}">{:lang('BACK')}</a>
+            </div>
+    </form>
+</block>
+
+
+<block name="headerjs">
+    <script type="text/html" id="photos-item-tpl">
+        <li id="saved-image{id}">
+            <input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+            <input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+                   style="width: 200px;" title="图片名称">
+            <img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;"
+                 onclick="imagePreviewDialog(this.src);">
+            <a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+            <a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+        </li>
+    </script>
+</block>
+
+<block name="footerjs">
+    <script>
+        $('#input-list_tpl').val("{$list_tpl|default=''}");
+        $('#input-one_tpl').val("{$one_tpl|default=''}");
+        $('.btn-cancel-thumbnail').click(function () {
+            $('#thumbnail-preview').attr('src', '__PLUGIN_TMPL__/public/assets/images/default-thumbnail.png');
+            $('#thumbnail').val('');
+        });
+    </script>
+</block>

@@ -1,0 +1,161 @@
+<!-- 字段设置 -->
+<include file="public/header"/>
+<script src="__PLUGIN_TMPL__/public/assets/jquery-ui/jquery-ui.min.js"></script>
+<link rel="stylesheet" id="css-theme" href="__PLUGIN_TMPL__/public/assets/jquery-ui/jquery-ui.min.css">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <include file="public/_nav"/>
+        <li class="active"><a href="{:cmf_plugin_url('Modules://AdminTables/index',['modules_id'=>$modules_id])}">表管理</a></li>
+    </ul>
+    <br/>
+
+    <!-- 数据库表切换 选项卡   字体加粗表示单独的显示列表-->
+    <div class="row">
+        <div class="col-md-2 tabbable tabs-left" role="tablist">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs  nav-pills nav-stacked">
+                <foreach name="tables" item="v">
+                    <li <if condition="$table_name==$v['Name'] || $table_name==$v['pinyin']"> class="active" </if> >
+                    <a href="{:cmf_plugin_url('Modules://AdminControl/index', ['modules_id'=>$modules_id,'control'=>$control,'table_name'=>$v['Name']])}"
+                    <if condition="$v['relate_level']!='1'">style="font-weight:bold;"</if> >
+                    【{$v['Comment']}】<br/>{$v['Name']}</a>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <!-- 编辑-列表-搜索   选项卡-->
+            <ul class="nav nav-tabs">
+                <li <if condition="$control=='list'">class="active"</if> ><a href="{:cmf_plugin_url('Modules://AdminControl/index', ['modules_id'=>$modules_id,'table_name'=>$table_name,'control'=>'list'])}">显示列表</a></li>
+                <li <if condition="$control=='edit'">class="active"</if> ><a href="{:cmf_plugin_url('Modules://AdminControl/index', ['modules_id'=>$modules_id,'table_name'=>$table_name,'control'=>'edit'])}">编辑控制</a></li>
+                <li <if condition="$control=='search'">class="active"</if> ><a href="{:cmf_plugin_url('Modules://AdminControl/index', ['modules_id'=>$modules_id,'table_name'=>$table_name,'control'=>'search'])}">搜索项</a></li>
+                <div class="text-right">
+                    <a class="btn btn-info"  href="{:cmf_plugin_url('Modules://AdminTables/index',['modules_id'=>$modules_id])}"><i class="fa fa-reply"></i> 返回表管理</a>
+                    <a class="btn btn-success"  href="{:cmf_plugin_url('Modules://AdminTables/fields',['modules_id'=>$modules_id,'table_name'=>$table_name])}">-> 字段管理</a>
+                </div>
+            </ul>
+            <!-- 内容列表 -->
+            <form class="js-ajax-form margin-top-20" action="" method="post">
+                <input type="hidden" name="modules_id" value="{$modules_id}">
+                <input type="hidden" name="control" value="{$control}">
+                <input type="hidden" name="table_name" value="{$table_name}">
+                <table class="table table-hover table-bordered">
+                    <thead id="box">
+                    <tr>
+                        <th width="10%">字段</th>
+                        <th width="10%">字段描述</th>
+                        <th width="10%">别名</th>
+                        <th width="8%">尺寸宽</th>
+                        <th width="16%">类型</th>
+                        <if condition="$control!='search'">
+                            <th>类型配置值</th>
+                        </if>
+                        <if condition="$control=='edit'">
+                            <th width="8%">显示位置</th>
+                        </if>
+                        <th width="8%">启用</th>
+                    </tr>
+                    </thead>
+                    <tbody class="sortable">
+                    <php>$has_many = false;</php>
+                    <foreach name="allField"  key="k" item="v">
+                        <tr>
+                            <php>
+                                $alias = isset($v['alias'])?$v['alias']:(empty($v['comment'])?$v['name']:'');
+                                $width = isset($v['width'])?$v['width']:'';
+                                $type = isset($v['type'])?$v['type']:'';
+                                $position = isset($v['position'])?$v['position']:'';
+                                $config = isset($v['config'])?$v['config']:'';
+                                if($table_pinyin && $v['name']=='id') $has_many = true;//判断是否是一对多的附表
+                            </php>
+                            <td>{$v['name']}</td>
+                            <td>{$v['comment']}</td>
+                            <td><input class="form-control" type="text" name="post[{$v['name']}][alias]" size="1" value="{$alias}"></td>
+
+                            <td><input class="form-control" type="text" name="post[{$v['name']}][width]" size="1" value="{$width}"></td>
+
+                            <td>
+                                <php>\plugins\modules\lib\ControlForm::select($control, "post[".$v['name']."][type]", $type)</php>
+                            </td>
+
+                            <if condition="$control!='search'">
+                                <td><input class="form-control" type="text" name="post[{$v['name']}][config]" id="post[{$v['name']}][config]" size="8" value="{$config}"></td>
+                            </if>
+                            <if condition="$control=='edit'">
+                                <td><input class="form-control" type="text" name="post[{$v['name']}][position]" size="1" value="{$position}"></td>
+                            </if>
+
+                            <td>
+                                <if condition="$table_relate_level neq 1 || $v['name'] neq $table_relate_field">
+                                    <php>$checked = isset($v['type']) ? 'checked=true': '';</php>
+                                    <input class="form-control" type="checkbox" name="post[{$v['name']}][stat]" {$checked}>
+                                </if>
+                            </td>
+                        </tr>
+                    </foreach>
+                    </tbody>
+                </table>
+
+                <div class="col-sm-offset-0 col-sm-12">
+                    <button class="btn btn-primary js-ajax-submit" data-action="{:cmf_plugin_url('Modules://AdminControl/doPost')}">{:lang("SAVE")}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- 温馨提示 -->
+<if condition="empty($table_pinyin)">
+    <div class="alert alert-warning alert-dismissable navbar-fixed-bottom">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>按住表格行可拖动，调整后点击【保存】生效。</p>
+    </div>
+</if>
+<if  condition="$has_many">
+    <!-- 温馨提示 -->
+    <div class="alert alert-danger alert-dismissable navbar-fixed-bottom">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>一对多关系的表将单独在编辑中展示列表，不会影响主表和其它表的配置。</p>
+    </div>
+</if>
+
+<script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+<script>
+    $(function() {
+        $("select").each(function(){
+            var data_value = $(this).attr('data-value');
+            $(this).children("option").each(function(){
+                if($(this).attr("value") == data_value){
+                    $(this).parent().val( data_value );//初始化选中
+                }
+            });
+        });
+
+        $(".sortable").sortable({
+            cursor: "move",
+            items: "tr", //只是tr可以拖动
+            opacity: 0.6, //拖动时，透明度为0.6
+            revert: false, //释放时，增加动画
+            update: function(event, ui) { //更新排序之后
+                $(this).sortable("toArray");
+            }
+        });
+        $(".sortable").disableSelection();
+    });
+
+    //下拉触发->显示说明描述
+    function control_edit_select(obj){
+        //获取被选中的option标签
+        var op = obj.options[obj.selectedIndex];
+        var str = obj.name.slice(0,obj.name.length-6) + '[config]';
+        document.getElementById(str).setAttribute('value', '');
+        var placeholder = $(op).attr('data-tip');
+        document.getElementById(str).setAttribute('placeholder', placeholder!=undefined ? placeholder : '');
+    }
+</script>
+</body>
+</html>

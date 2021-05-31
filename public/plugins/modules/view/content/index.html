@@ -1,0 +1,141 @@
+<include file="public/new_header"/>
+</head>
+<body>
+
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+              
+                <div class="container-fluid">
+                
+                    <div class="row">
+                       <div class="col-md-12">
+                            <div class="card">
+                                <ul class="nav nav-tabs">
+                                    <foreach name="allTables" key="table" item="field">
+                                        <php>if($field['relate_level']==1) continue;</php>
+                                        <li <if condition="$table_name eq $table">class="active"</if> >
+                                            <a href="{:cmf_plugin_url('Modules://Content/index',['modules_id'=>$modules_id, 'table_name'=>$table])}" alt="{$field['remark']}">{$field['remark']}</a>
+                                        </li>
+                                        <if condition="empty($field['pinyin'])">
+                                            <li><a href="{:cmf_plugin_url('Modules://Content/edit',['modules_id'=>$modules_id,'table_name'=>$table])}">添加内容</a></li>
+                                        </if>
+                                    </foreach>
+                                    <eq name='modeles_date.is_category' value='1'>
+                                        <li><a href="{:cmf_plugin_url('Modules://admin_column/index',['modules_id'=>$modules_id])}">分类管理</a></li>
+                                    </eq>
+                                </ul>
+
+                                <div class="card-body js-check-wrap">
+                                    <form class="well form-inline margin-top-20" method="post" action="{:cmf_plugin_url('Modules://Content/index')}">
+                                        <input type="hidden" name="modules_id" value="{$modules_id}">
+                                        <input type="hidden" name="table_name" value="{$table_name}">
+                                        <php>
+                                            foreach($control_search as $k=>$v){
+                                                    \plugins\modules\lib\SearchForm::start($v,$table_name,$modules_id);
+                                            }
+                                            //关联表编辑时，传递关联字段值过去。
+                                            $urlParam = ['modules_id'=>$modules_id, 'table_name'=>$table_name];
+                                            if(isset($itemid) && $itemid) $urlParam['itemid'] = $itemid;
+                                        </php>
+                                        <button class="btn btn-primary">搜索</button>
+                                        <a class="btn btn-danger" href="{:cmf_plugin_url('Modules://Content/index',$urlParam)}">清空</a>
+                                        <a class="btn btn-success"  href="{:cmf_plugin_url('Modules://Content/edit',$urlParam)}"> 添加数据</a>
+                                    </form>
+
+
+                                    <form class="js-ajax-form" method="post" action="{:cmf_plugin_url('Modules://Content/listOrder')}">
+
+                                        <input type="hidden" name="modules_id" value="{$modules_id}">
+                                        <input type="hidden" name="table_name" value="{$table_name}">
+                                        
+                                        <div class="table-actions">
+                                            <button class="btn btn-sm btn-primary js-ajax-submit" type="submit">{:lang('SORT')}</button>
+                                            <eq name='modeles_date.is_del' value='1'>
+                                                <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('Modules://Content/delete',['modules_id'=>$modules_id,'table_name'=>$table_name])}"
+                                                        data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+                                                </button>
+                                            </eq>
+                                        </div>
+                                        
+                                        <div class='table-responsive'>
+                                            <table class="table table-hover table-bordered table-list">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="15">
+                                                            <label class="lyear-checkbox checkbox-primary">
+                                                                <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"><span></span>
+                                                            </label>
+                                                        </th>
+                                                        <th width="50">{:lang('SORT')}</th>
+                                                        <th width="20">ID</th>
+                                                        <!-- 标题栏输出 -->
+                                                        <php>
+                                                            foreach($control_list as $v){
+                                                                \plugins\modules\lib\ListForm::startTitle($v,$table_name);
+                                                            }
+                                                        </php>
+                                                        <th width="290">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <foreach name="items" item="vo">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="lyear-checkbox checkbox-primary">
+                                                                <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                                                                   value="{$vo.id}"><span></span>
+                                                            </label>
+                                                        </td>
+                                                        <td><input name='list_orders[{$vo.id}]' class="input input-order mr5" type='text' size='3'
+                                                               value='{$vo.list_order}'></td>
+                                                        <td>{$vo.id}</td>
+
+                                                        <php>
+                                                            \plugins\modules\lib\ListForm::addData($vo);//把内容初始化进去
+                                                            foreach($control_list as $v){
+                                                                \plugins\modules\lib\ListForm::start($v);
+                                                            }
+                                                        </php>
+                                                        <td>
+                                                            <a class='btn btn-xs btn-primary' href="{:cmf_plugin_url('Modules://Content/edit',array('id'=>$vo['id'],'modules_id'=>$modules_id,'table_name'=>$table_name))}">编辑</a>
+                                                            <if condition="$is_main_table">
+                                                                <foreach name="allTables" key="table" item="field">
+                                                                    <if condition="$table neq $table_name">
+                                                                        <if condition="$field['relate_level'] eq 2">
+                                                                            <a href="{:cmf_plugin_url('Modules://Content/index',array('itemid'=>$vo['id'],'modules_id'=>$modules_id,'table_name'=>$table))}">{$field['Comment']}</a>
+                                                                        </if>
+                                                                    </if>
+                                                                </foreach>
+                                                            </if>
+                                                            <eq name='modeles_date.is_del' value='1'>
+                                                                <a href="{:cmf_plugin_url('Modules://Content/delete',array('ids'=>$vo['id'],'modules_id'=>$modules_id,'table_name'=>$table_name))}" class="btn btn-xs btn-danger js-ajax-delete">删除</a>
+                                                            </eq>
+                                                        </td>
+                                                    </tr>
+                                                </foreach>
+
+                                            </table>
+                                        </div>
+                                        <eq name='modeles_date.is_del' value='1'>
+                                            <div class="table-actions">
+                                                <button class="btn btn-sm btn-primary js-ajax-submit" type="submit">{:lang('SORT')}</button>
+                                                <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('Modules://Content/delete',['modules_id'=>$modules_id,'table_name'=>$table_name])}"
+                                                        data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+                                                </button>
+                                            </div>
+                                        </eq>
+                                        <div class="pagination">{$page|default=''}</div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="__PLUGIN_TMPL__/public/assets/js/admin.js"></script>
+
+</body>
+</html>

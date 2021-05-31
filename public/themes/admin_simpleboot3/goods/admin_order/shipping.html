@@ -1,0 +1,30 @@
+<include file="public@new_header"/>
+
+</head>
+<body>
+	<div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card">
+              <div class="layui-card-header">快递信息</div>
+              <div class="layui-card-body">
+                
+                <ul class="layui-timeline">
+                    <foreach name='data.data' item='vo'>
+                      <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                          <div class="layui-timeline-title">
+                            {$vo.time}<br><br>{$vo.context}
+                          </div>
+                        </div>
+                      </li>
+                    </foreach>
+                </ul>
+                
+              </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,66 @@
+<include file="public@new_header"/>
+</head>
+<body>
+	<div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li><a href="{:url('goods/AdminExpress/index')}">快递管理</a></li>
+				<li><a href="{:url('goods/AdminExpress/add')}" target="_self">添加快递</a></li>
+				<li class="layui-this"><a>编辑快递</a></li>
+              </ul>
+            </div>
+     		
+            <form action="{:url('AdminExpress/edit_post')}" class="layui-form js-ajax-form" method="post">
+
+		      <div class="layui-card-body" style="padding: 15px;">
+		      	<div class="layui-tab ">
+			      	
+			        <div class='layui-col-md6'>
+				        <div class="layui-tab-item layui-show">
+				          
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">快递名称</label>
+				            <div class="layui-input-block">
+				              <input type="text" name="post[name]" lay-verify="title" autocomplete="off" placeholder="请输入快递名称" class="layui-input" value='{$data.name}'>
+				            </div>
+				          </div>
+
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">快递编码</label>
+				            <div class="layui-input-block">
+				              <input type="text" name="post[com]" placeholder="请输入快递编码" class="layui-input" value='{$data.com}'>
+				            </div>
+				          </div>
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">所属类型</label>
+				            <div class="layui-input-block">
+				              <input type="text" name="post[type_name]" placeholder="请输入快递编码" class="layui-input" value='{$data.type_name}'>
+				            </div>
+				          </div>
+				          
+				        </div>
+			        </div>
+			    </div>
+		        <div class="layui-form-item layui-layout-admin">
+		            <div class="layui-input-block">
+		              <div class="layui-footer" style="left: 0;">
+		              	<input type="hidden" name='id' value='{$data.id}'>
+		                <button class="layui-btn js-ajax-submit" >立即提交</button>
+		              </div>
+		            </div>
+		        </div>
+		        
+		      </div>
+	      </form>
+        </div>
+    </div>
+	<include file="public@scripts"/>
+	<script src="__STATIC__/js/layui/layui.js"></script>
+	<script>
+		layui.use(['form'], function(){
+		  var form = layui.form
+		})
+	</script>
+</body>
+</html>

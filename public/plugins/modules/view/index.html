@@ -1,0 +1,103 @@
+        
+        <div class="row">
+              <div class="col-lg-6 col-md-6"> 
+                <div class="card">
+                  <div class="card-header">
+                    <h4>管理员文章发布统计图</h4>
+                  </div>
+                  <div class="card-body">
+                    <canvas class="day_data_modules_data" id="day_data_modules_data"></canvas>
+                    <php>
+                        $category = implode("','",$day_data_map['legend']);
+                    </php>
+                    <script type="text/javascript">
+
+                        var $dashModulesChartBarsCntDay  = jQuery('.day_data_modules_data')[0].getContext( '2d' );
+                        
+                        var $dashModulesChartBarsDayData = {
+                            labels: ['{$category}'],
+                            datasets: [],
+                        };
+                    </script>
+                    <foreach name='day_data_map.series' item='value' key='k'>
+                        <php>$series = implode(',',$value['data']);</php>
+                        <script type="text/javascript">
+
+                            var color = getRandomColor();
+                            $dashModulesChartBarsDayData.datasets.push({
+                                label: '{$value.name}',
+                                data: [{$series}],
+                                borderColor: color,
+                                backgroundColor:color,
+                                borderWidth: 1,
+                                fill: false,
+                                lineTension: 0.5
+                            })
+
+                        </script>
+                    </foreach>
+                    <script>
+                        new Chart($dashModulesChartBarsCntDay, {
+                            type: 'line',
+                            data: $dashModulesChartBarsDayData,
+                            options: {
+                                responsive: true,
+                                title: {
+                                    display: true,
+                                    text: '管理员文章发布统计图'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                }
+                            }
+                        });
+                    </script>
+                  </div>
+                </div>
+              </div>
+
+        </div>
+        <div class="row">
+          
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>项目信息</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>栏目</th>
+                        <th>总文章数量</th>
+                        <th>已发布数量</th>
+                        <th>待审核数量</th>
+                        <th>驳回数量</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <foreach name='modules_list' key='key' item='vo'>
+                            <tr>
+                                <td>{$key+1}</td>
+                                <td>{$vo.name}</td>
+                                <td>{$vo.total_num}</td>
+                                <td>{$vo.review_num}</td>
+                                <td>{$vo.no_review_num}</td>
+                                <td>{$vo.rej_review_num}</td>
+                            </tr>
+                        </foreach>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

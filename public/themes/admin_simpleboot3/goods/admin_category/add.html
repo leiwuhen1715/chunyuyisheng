@@ -1,0 +1,89 @@
+<include file="public@new_header"/>
+</head>
+<body>
+	<div class="layui-fluid">
+	    
+	    <div class="layui-card">
+	        <div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li><a href="{:url('AdminCategory/index')}">分类管理</a></li>
+					<li class="layui-this"><a href="{:url('AdminCategory/add')}">添加分类</a></li>
+				</ul>
+			</div>
+
+	   	  <form action="{:url('AdminCategory/add_post')}" class="layui-form js-ajax-form" method="post">
+		      <div class="layui-card-body" style="padding: 15px;">
+		      	<div class="layui-tab ">
+			      	
+			        <div class='layui-col-md6'>
+				        <div class="layui-tab-item layui-show">
+				          
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">上级</label>
+				            <div class="layui-input-inline">
+				            	<select name="post[parent_id]">
+									<option value="0">作为一级分类</option>
+									{$category_tree}
+								</select>
+				            </div>
+				          </div>
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">分类名称</label>
+				            <div class="layui-input-block">
+				              <input type="text" name="post[name]" lay-verify="title" autocomplete="off" placeholder="请输入分类名称" class="layui-input">
+				            </div>
+				          </div>
+				          <div class="layui-form-item">
+				              <label class="layui-form-label">关键字</label>
+				              <div class="layui-input-block">
+				                <input type="tel" name="post[cat_keywords]" autocomplete="off" class="layui-input" placeholder="请输入关键字">
+				              </div>
+				          </div>
+				          <div class="layui-form-item layui-form-text">
+				            <label class="layui-form-label">描述</label>
+				            <div class="layui-input-block">
+				              <textarea name="post[cat_desc]" placeholder="请输入描述" class="layui-textarea"></textarea>
+				            </div>
+				          </div>
+				          
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">显示</label>
+				            <div class="layui-input-block">
+				              <input type="checkbox" name="post[is_show]" value="1" lay-skin="switch" checked lay-text="是|否">
+				            </div>
+				          </div>
+				          <div class="layui-form-item">
+				            <label class="layui-form-label">缩略图</label>
+				            <div class="layui-input-block">
+				            	<input type="hidden" name="post[cat_img]" id="thumb" value="">
+				            	<a href="javascript:uploadOneImage('图片上传','#thumb');">
+									<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumb-preview" width="135" style="cursor: hand" />
+								</a>
+				              	<input type="button" class="btn btn-small" onclick="$('#thumb-preview').attr('src','__TMPL__/public/assets/images/default-thumbnail.png');$('#thumb').val('');return false;" value="取消图片">
+				            </div>
+				          </div>
+				        </div>
+			        </div>
+			    </div>
+		        <div class="layui-form-item layui-layout-admin">
+		            <div class="layui-input-block">
+		              <div class="layui-footer" style="left: 0;">
+		                <button class="layui-btn js-ajax-submit" >立即提交</button>
+		              </div>
+		            </div>
+		        </div>
+		        
+		      </div>
+	      </form>
+	    </div>
+	</div>
+	<include file="public@scripts"/>
+	<script src="__STATIC__/js/layui/layui.js"></script>
+	<script>
+		layui.use(['form'], function(){
+		  var form = layui.form
+		})
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,136 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap goods">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="javascript:;">商品回收站</a></li>
+		</ul>
+		<form class="well form-search" id="search-form2" method="post" action="" onsubmit="return false">
+			
+			关键字： 
+			<input type="text" name="keyword" style="width: 200px;" value="" placeholder="请输入关键字...">
+			<button type="submit" class="btn btn-primary" onclick="ajax_get_table('search-form2',1)" value="搜索" >搜索</button>			
+		</form>
+		<form class="js-ajax-form" action=""  method="post">
+			
+			<div class="table-actions">				
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('AdminGoods/clean_all')}" data-subcheck="true" data-msg="您确定删除吗？">{:L('DELETE')}</button>
+			</div>
+			<div id="ajax_return"> </div>
+		</form>
+		
+	</div>
+	
+	<!--script src="__PUBLIC__/js/common.js"></script-->
+	<script src="__PUBLIC__/js/myajax.js"></script>
+	
+	<script>
+    $(document).ready(function(){
+		// ajax 加载列表
+        ajax_get_table('search-form2',1);
+
+    });
+
+
+    // ajax 抓取页面 form 为表单id  page 为当前第几页
+    function ajax_get_table(form,page){
+		cur_page = page; //当前页面 保存为全局变量
+		$('#loading',parent.document).show();
+            $.ajax({
+                type : "POST",
+                url:'ajaxrecyle?p='+page,
+                data : $('#'+form).serialize(),// 你的formid
+                success: function(data){
+                    $("#ajax_return").html('');
+                    $("#ajax_return").append(data);
+					$('#loading',parent.document).hide();
+                }
+            });
+        }
+      
+        // 点击排序
+        function sort(field)
+        {									
+           $("input[name='orderby1']").val(field);
+           var v = $("input[name='orderby2']").val() == 'desc' ? 'asc' : 'desc';             
+           $("input[name='orderby2']").val(v);
+		   
+           ajax_get_table('search-form2',cur_page);		   
+        }
+        
+        // 删除操作
+        function del(id)
+        {           
+			art.dialog({
+                    title: false,
+                    icon: 'question',
+                    content: '确定要删除吗？',
+                    
+                    close: function () {                       
+                        return true;
+                    },
+					okVal: "确定",
+                    ok: function () {
+					$('#loading',parent.document).show();
+                        $.ajax({
+							url:"clean?id="+id,
+							success: function(data){
+								if(data.state === 'success'){
+									ajax_get_table('search-form2',cur_page);
+								}else if(data.state === 'fail'){
+									art.dialog({
+                                    content: '删除失败',
+                                    icon: 'warning',
+                                    ok: function () {                                        
+                                        return true;
+                                    }
+									});
+								}									  
+							}
+						}); 
+						return true;
+                        
+					},
+					cancelVal: '关闭',
+                    cancel: true
+                    });			          
+          }
+		  
+		 function restore(id){
+			art.dialog({
+                    title: false,
+                    icon: 'question',
+                    content: '确定要还原吗？',
+                    
+                    close: function () {                       
+                        return true;
+                    },
+					okVal: "确定",
+                    ok: function () {
+					$('#loading',parent.document).show();
+                        $.ajax({
+							url:"restore?id="+id,
+							success: function(data){
+								if(data.state === 'success'){
+									ajax_get_table('search-form2',cur_page);
+								}else if(data.state === 'fail'){
+									art.dialog({
+                                    content: '还原失败',
+                                    icon: 'warning',
+                                    ok: function () {                                        
+                                        return true;
+                                    }
+									});
+								}									  
+							}
+						}); 
+						return true;
+                        
+					},
+					cancelVal: '关闭',
+                    cancel: true
+                    });	
+		 }
+</script> 
+</body>
+</html>

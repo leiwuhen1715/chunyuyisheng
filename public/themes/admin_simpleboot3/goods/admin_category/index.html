@@ -1,0 +1,45 @@
+<include file="public@new_header" />
+
+</head>
+
+<body>
+	<div class="layui-fluid">
+		<div class="layui-card">
+			<div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this"><a href="{:url('AdminCategory/index')}">分类管理</a></li>
+					<li><a href="{:url('AdminCategory/add')}">添加分类</a></li>
+				</ul>
+			</div>
+
+			<div class="card-body js-check-wrap">
+				<form method="post" class="js-ajax-form" action="{:url('AdminCategory/listOrder')}">
+					<div class="layui-card-body table-responsive">
+						<div class="layui-table-tool" style="padding: 0;">
+							<div class="layui-btn-container">
+								<button type="submit" class="layui-btn layui-btn-sm js-ajax-submit" style='margin:10px'>排序</button>
+							</div>
+						</div>
+						<table class="layui-table" style="margin: 0">
+							<thead>
+								<tr>
+									<th>排序</th>
+									<th>ID</th>
+									<th>分类名称</th>
+									<th>是否显示</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								{$taxonomys}
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<include file="public@scripts"/>
+</body>
+
+</html>

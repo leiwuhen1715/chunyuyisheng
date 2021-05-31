@@ -1,0 +1,115 @@
+<include file="public@new_header"/>
+</head>
+<body>
+	
+	<div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <a href="{:url('AdminOrder/ship_list')}">发货单列表</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body js-check-wrap">
+              <form class="layui-form form-inline margin-top-20" method="post" action="">
+                <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto" style='margin-bottom: 10px'>
+                  <!-- 搜索： -->
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="keyword_sn" name='keyword_sn' value="" placeholder="搜索订单编号">
+                  </div>
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="keyword_name" name='keyword_name' value="" placeholder="搜索收货人">
+                  </div>
+                  <button type='button' class="layui-btn" lay-submit lay-filter="LAY-app-order-search">搜索</button>
+              </div>
+
+              <div class="layui-card-body table-responsive">
+                  <table class="layui-hide" id="test" lay-filter="test"></table>
+              </div>
+              </form>
+            </div>
+        </div>
+    </div>
+    <script>
+    	var order_status = {:json_encode($order_status)};
+    	var pay_status = {:json_encode($pay_status)};
+    	var shipping_status = {:json_encode($shipping_status)};
+    </script>
+    <script src="__STATIC__/js/layui/layui.js"></script>
+	<script type="text/html" id="barDemo">
+	  <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+	</script>
+	<script type="text/html" id="buttonTpl">
+        {{#  if(d.shipping_status == 1){ }}
+	        <button type="button" class="layui-btn layui-btn-warm layui-btn-xs">已发货</button>
+	    {{#  } else if(d.shipping_status == 2){ }}
+	        <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">已收货</button>
+	    {{#  } }}
+        
+    </script>
+	<script type="text/html" id="test-table-totalRow-toolbarDemo">
+	
+	</script>
+	<script>
+
+	    layui.use(['form','table'], function(){
+	      var form = layui.form
+	      ,layer = layui.layer
+	      ,table = layui.table;
+
+	      table.render({
+	        elem: '#test'
+	        ,url:"{:cmf_url('AdminOrder/ajax_ship_list')}"
+	        ,toolbar:"#test-table-totalRow-toolbarDemo"
+	        ,cols: [[
+	          {field:'order_id', type: 'checkbox'}
+	          ,{field:'order_id', width:80, title: 'ID', sort: true}
+	          ,{field:'order_sn', title: '订单编号'}
+	          ,{field:'consignee', width:110, title: '收货人'}
+	          ,{field:'mobile', width:120, title: '手机'}
+	          ,{field:'order_amount',width:110, title: '应付金额',sort: true}
+	          ,{field:'shipping_status', width:110, title: '发货状态', sort: true,templet: "#buttonTpl",}
+	          ,{field:'shipping_time',  width:160,title: '发货时间', sort: true}
+	          ,{field:'add_time',  width:160,title: '下单时间', sort: true}
+	          ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
+	        ]]
+	        ,id: 'testReload'
+	        ,page: true
+	      });
+
+	        //头工具栏事件
+	        table.on('toolbar(test)', function(obj){
+	          var checkStatus = table.checkStatus(obj.config.id);
+	          switch(obj.event){
+	            case 'getCheckData':
+	              var data = checkStatus.data;
+	              layer.alert(JSON.stringify(data));
+	            break;
+	          };
+	        });
+	        //监听行工具事件
+	        table.on('tool(test)', function(obj){
+
+	            var data = obj.data;
+	            if(obj.event === 'edit'){
+	                var id = obj.data.order_id
+	                var href = "{:cmf_url('AdminOrder/ship_detail')}?order_id="+id
+	                window.location.href = href
+	            }
+	        });
+	        //监听搜索
+		    form.on('submit(LAY-app-order-search)', function(data){
+		      var field = data.field;
+		      
+		      //执行重载
+		      table.reload('testReload', {
+		        where: field
+		      });
+		    });
+	    });
+	</script>
+
+</body>
+</html>

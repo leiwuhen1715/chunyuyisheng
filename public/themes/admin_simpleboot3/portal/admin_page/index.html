@@ -1,0 +1,100 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="{:url('AdminPage/index')}">页面管理</a></li>
+                                <li><a href="{:url('AdminPage/add')}">添加页面</a></li>
+                            </ul>
+                            <div class="card-body js-check-wrap">
+                                <form class="well form-inline margin-top-20" method="post" action="{:url('AdminPage/index')}">
+                                    <input type="text" class="form-control" name="keyword" style="width: 200px;"
+                                           value="{$keyword|default=''}" placeholder="请输入关键字">
+                                    <button class="btn btn-primary">搜索</button>
+                                </form>
+                                <form class="js-ajax-form" method="post">
+                                    <!-- <div class="table-actions">
+                                        <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                                                data-subcheck="true" data-msg="{:lang('DELETE_CONFIRM_MESSAGE')}">{:lang('DELETE')}
+                                        </button>
+                                    </div> -->
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th width="16">
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"><span></span>
+                                                </label>
+                                            </th>
+                                            <th width="100">ID</th>
+                                            <th>标题</th>
+                                            <th width="80">作者</th>
+                                            <th width="160">发布时间</th>
+                                            <th width="80">状态</th>
+                                            <th width="120">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <php>$status=array("1"=>'已发布',"0"=>'未发布');</php>
+                                        <foreach name="pages" item="vo">
+                                            <tr>
+                                                <td>
+                                                    <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                                                           value="{$vo.id}"><span></span>
+                                                       </label>
+                                                </td>
+                                                <td>{$vo.id}</td>
+                                                <td>
+                                                    <a href="{:url('portal/page/index',array('id'=>$vo['id']))}" target="_blank">
+                                                        {$vo.post_title}
+                                                    </a>
+                                                </td>
+                                                <td>{$vo.user_nickname}</td>
+                                                <td>
+                                                    <empty name="vo.published_time">
+                                                        未发布
+                                                        <else/>
+                                                        {:date('Y-m-d H:i',$vo['published_time'])}
+                                                    </empty>
+                                                </td>
+                                                <td>
+                                                    <notempty name="vo.post_status">
+                                                        已发布
+                                                        <else/>
+                                                        未发布
+                                                    </notempty>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-xs btn-primary" href="{:url('AdminPage/edit',array('id'=>$vo['id']))}">{:lang('EDIT')}</a>
+                                                    <!-- <a class="btn btn-xs btn-danger js-ajax-delete" href="{:url('AdminPage/delete',array('id'=>$vo['id']))}">{:lang('DELETE')}</a> -->
+                                                </td>
+                                            </tr>
+                                        </foreach>
+                                    </table>
+                                    <!-- <div class="table-actions">
+                                        <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:url('AdminPage/delete')}"
+                                                data-subcheck="true" data-msg="你确定删除吗？">{:lang('DELETE')}
+                                        </button>
+                                    </div> -->
+                                    <div class="pagination">{$page}</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

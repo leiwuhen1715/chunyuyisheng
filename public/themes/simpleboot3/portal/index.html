@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>APP 下载</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<link rel="stylesheet" href='__TMPL__/public/css/style.css' />
+
+<script src="https://res.sharetrace.com/sharetrace.min.js"></script>
+
+<script>
+  let isInitSuccess = false;
+  ShareTrace.init({
+    appkey: 'ee2c076a68eb10db', //分配的appkey
+    promo_code: 'CC7KCMH6', //自定义参数，如果不设置默认会取url携带的参数
+    success: function () {
+      isInitSuccess = true;
+      /*
+        如果开启调起app功能建议在此处调用wakeUp()
+      */
+      ShareTrace.wakeUp();
+      /*
+        如果要打开页面就自动下载，建议在此处调用download()方法，
+        不过此处调用可能会降低成功率，建议在点击方法中触发download()方法
+      */
+      ShareTrace.download();
+    }
+  });
+  //下载按钮点击时调用方法
+  function btnClickApp(){
+    if(isInitSuccess){
+      ShareTrace.download();
+    }else{
+      //如果初始化失败建议自己指定下载地址，虽然不能获取安装参数但是不会影响用户的下载
+      window.location.href = 'YOUR DOWNLOAD URL';
+    }
+  }
+</script>
+
+</head>
+<body>
+<div class="content channel-page">
+  <div class="page-index">
+    <div style="padding-top: 20px;padding-left:10px">
+      <p style="line-height:1.3rem;font-size:1.6rem;">
+        <span style="color: green"></span>
+      </p>
+    </div>
+    <div class="udid-content channel-content">
+      <img style="width: 72px; height: 72px" alt="" src="__TMPL__/public/images/logo.png" />
+      <p style="font-size:1.6rem;margin:2px auto;">移动健康专家</p>
+    </div>
+    <div style="padding-top: 1em">
+        <p style="text-align: center;font-size: 1em;padding-top: 0.5em;color: #282828">
+            <img src='__TMPL__/public/images/android.png' alt="" style="vertical-align: middle;margin-right: 0.5em;width: 16px"/>序号:93 / 版本:1.1.4
+        </p>
+    </div>
+    <!--<div class="channel-title">
+      <p></p>
+    </div>-->
+    <div class="content-block">
+      <p style="text-align: center">
+        <a id="btnClickApp" onclick="btnClickApp()" href="javascript:;" style="visibility:visible" class="button button-big udid-bt channel-bt">下载APP</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

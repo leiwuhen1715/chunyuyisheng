@@ -1,0 +1,34 @@
+<include file="public@header"/>
+<link href="__TMPL__/public/assets/simpleboot3/css/theme.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+	        <li><a href="{:url('goods/AdminSupplier/index')}">仓库管理</a></li>
+			<li class="active"><a href="{:url('goods/AdminSupplier/edit')}">编辑仓库</a></li>
+	    </ul>
+		<form class="form-horizontal js-ajax-form" action="{:url('goods/AdminSupplier/edit_post')}" method="post">
+			<input type="hidden" name="post[id]" value="{$data.id}" />
+			<div class="tabbable">
+		        <div class="tab-content">
+						<fieldset>
+							<div class="control-group">
+								<label class="control-label">仓库名称</label>
+								<div class="controls">
+									<input type="text" name="post[name]" value="{$data.name}" required><span class="form-required">*</span>
+								</div>
+							</div>
+							
+						</fieldset>
+		        </div>
+		    </div>
+		    <div class="form-actions">
+		     	<button class="btn btn-primary js-ajax-submit"type="submit">保存</button>
+		      	<a class="btn" href="javascript:history.back(-1);">返回</a>
+		    </div>
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+	
+</body>
+</html>

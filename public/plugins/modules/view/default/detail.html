@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+    <title>{$data.title} - {$site_info.site_seo_title|default=''}</title>
+    <meta name="keywords" content="{$data.keywords|default=''}"/>
+    <meta name="description" content="{$data.digest|default=''}">
+    <include file="public@head"/>
+</head>
+<body>
+ 
+  <include file="public@header"/>
+  <div id="position">
+    <div class="wrapper auto">当前所在位置：<a href="/">首页</a> &gt; <a href="{:cmf_url('portal/'.$act.'/index')}">{$posti}</a> <notempty name='category'>&gt; {$category.name}</notempty></div>
+  </div>
+  <div class="wrap-white">
+    <div class="wrapper auto">
+      <div id="left" class="fl">
+        <div id="menu">
+          <section>
+            <h2>{$posti}</h2>
+            <h3></h3>
+          </section>
+          <dl>
+            <itemcate module_id="$module_id">
+              <dd <eq name='$category.id' value='$vo.id'>class="current"</eq>><a href="{:cmf_url('portal/'.$act.'/index',['id'=>$vo.id])}" title="{$vo.name}">{$vo.name}</a></dd>
+            </itemcate>
+          </dl>
+        </div>
+        <include file="public@left"/>
+        
+      </div>
+      <div id="right" class="fr">
+        <div id="lmbt"><span>{$posti}</span></div>
+       
+        <div id="single">
+          <h1 id="article-title">{$data.title}</h1>
+          <div id="zc-line"></div>
+          <div>
+            {$data.text}
+          </div>
+        </div>
+
+
+        <div id="prev-next">
+          <div class="fl">
+            <h3>上一篇</h3>
+            <h4>
+              <empty name='prev'>
+                  <a href="javascript:;">没有了</a>
+              <else>
+                  <a href="{:cmf_url('portal/'.$act.'/detail',['id'=>$prev.id])}">{$prev.title}</a>
+              </empty>
+            </h4>
+          </div>
+          <div class="fr">
+            <h3>下一篇</h3>
+            <h4>
+              <empty name='next'>
+                  <a href="javascript:;">没有了</a>
+              <else>
+                  <a href="{:cmf_url('portal/'.$act.'/detail',['id'=>$next.id])}">{$next.title}</a>
+              </empty>
+            </h4>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="clear"></div>
+     
+      <include file="public@flink"/>
+    </div>
+  </div>
+
+  <include file="public@footer"/>
+
+
+</body>
+</html>

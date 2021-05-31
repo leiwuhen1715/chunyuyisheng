@@ -1,0 +1,56 @@
+<include file="public@header"/>
+</head>
+<body>
+	<div class="wrap goods">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('goods/AdminBrand/index')}">产品品牌</a></li>
+			<li><a href="{:url('goods/AdminBrand/add')}">添加产品品牌</a></li>
+		</ul>
+		<form method="post" class="js-ajax-form" action="">
+			
+			<table class="table table-hover table-bordered table-list margin-top-20">
+				<thead>
+					<tr>						
+						<th width="50">ID</th>
+						<th>品牌名称</th>
+						<th>英文标识</th>
+						<th>品牌logo</th>
+						<th>品牌图片</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				<foreach name="type_list" item="vo">
+					<tr>
+						<td>{$vo.id}</td>
+						<td>{$vo.brandname}</td>
+						<td>{$vo.subname}</td>
+						<td>
+							<neq name="$vo.logo" value="">
+								<img src="{:cmf_get_image_url($vo.logo)}" width="50"/>
+								<else />
+								<a href="{:url('goods/AdminBrand/edit',array('id'=>$vo['id']))}">去上传</a>  
+							</neq>
+						</td>
+						<td>
+							<neq name="$vo.pic" value="">
+								<img src="{:cmf_get_image_url($vo.pic)}" width="50"/>
+								<else />
+								<a href="{:url('goods/AdminBrand/edit',array('id'=>$vo['id']))}">去上传</a>  
+							</neq>
+						</td>
+						<td>
+							<a href="{:url('goods/AdminBrand/edit',array('id'=>$vo['id']))}">编辑</a> | 
+							<a href="{:url('goods/AdminBrand/delete',array('id'=>$vo['id']))}" class="js-ajax-delete">删除</a>
+						</td>
+					</tr>
+				</foreach>
+				</tbody>
+				
+			</table>
+			
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

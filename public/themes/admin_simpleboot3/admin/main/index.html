@@ -1,0 +1,298 @@
+<php>
+    if (!function_exists('_get_system_widget')) {
+        function _get_system_widget($name){
+</php>
+<switch name="name">
+    <case value="CmfHub">
+        <div class="panel panel-default">
+          
+        </div>
+    </case>
+    
+</switch>
+<php>
+        }
+    }
+</php>
+
+<include file="public@header"/>
+
+<script type="text/javascript" src="__TMPL__/public/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="__TMPL__/public/assets/js/bootstrap.min.js"></script>
+<!--图表插件-->
+<script type="text/javascript" src="__TMPL__/public/assets/js/Chart.js"></script>
+<script type="text/javascript">
+    function getRandomColor(){    
+        var color = "#";    
+        var arr = [0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"];    
+        for(var i = 0; i < 6; i++){        
+            var num = Math.floor(Math.random() * 16);        
+            color += arr[num];    
+        }    
+        return color;
+    }
+</script>
+<style>
+	.right-30{margin-right: 60px;}
+	.order_detail{margin-bottom: 20px}
+	.order_detail>div{margin-left: 15px;display:inline-block;padding:15px 60px;text-align:center}
+	.order_detail div:nth-child(1){background:rgba(255, 125, 68, 0.1)}
+	.order_detail div:nth-child(2){background:rgba(255, 69, 68, 0.1)}
+	.order_detail>div .number{font-size: 28px;font-weight: 400;color: #FF8143;}
+</style>
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--页面主要内容-->
+    <main class="lyear-layout-content" >
+      
+      <div class="container-fluid">
+        
+        
+        
+        <if condition="!extension_loaded('fileinfo')">
+            <div class="grid-item col-md-12">
+                <div class="alert alert-danger alert-dismissible fade in" role="alert" style="margin-bottom: 0;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>提示!</strong> php_fileinfo扩展没有开启，无法正常上传文件！
+                </div>
+            </div>
+        </if>
+
+        <div class="grid-item col-md-12" id="thinkcmf-notices-grid" style="display:none;">
+            <div class="dashboard-box">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{:lang('SYSTEM_NOTIFICATIONS')}</h3>
+                    </div>
+                    <div class="panel-body home-info">
+                        <ul id="thinkcmf-notices" class="list-unstyled">
+                            <li>
+                                <img src="__TMPL__/public/assets/images/loading.gif" style="vertical-align: middle;"/>
+                                <span style="display: inline-block; vertical-align: middle;">加载中...</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="row">
+		  <div class="col-sm-6 col-lg-3 col-md-3">
+		    <div class="card bg-primary">
+		      <div class="card-body clearfix">
+		        <div class="pull-right">
+		          <p class="h6 text-white m-t-0">出售中的商品</p>
+		          <p class="h3 text-white m-b-0">{$statistic.goods_num}</p>
+		        </div>
+		        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-eye fa-1-5x"></i></span> </div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="col-sm-6 col-lg-3 col-md-3">
+		    <div class="card bg-danger">
+		      <div class="card-body clearfix">
+				  
+				<div class="pull-right">
+					<p class="h6 text-white m-t-0">会员总数</p>
+					<p class="h3 text-white m-b-0">{$statistic.user_total_num}</p>
+				</div>
+				<div class="pull-right right-30">
+				  <p class="h6 text-white m-t-0">今日新增</p>
+				  <p class="h3 text-white m-b-0">{$statistic.user_today_num}</p>
+				</div>
+		        <div class="pull-left"> 
+		            <span class="img-avatar img-avatar-48 bg-translucent">
+		                <i class="mdi mdi-account fa-1-5x"></i>
+		            </span> 
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="col-sm-6 col-lg-3 col-md-3">
+		    <div class="card bg-success">
+		      <div class="card-body clearfix">
+		        <div class="pull-right">
+		          <p class="h6 text-white m-t-0">今日订单数</p>
+		          <p class="h3 text-white m-b-0">{$statistic.order_today_num}</p>
+		        </div>
+		        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-arrow-down-bold fa-1-5x"></i></span> </div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="col-sm-6 col-lg-3 col-md-3">
+		    <div class="card bg-purple">
+		      <div class="card-body clearfix">
+		        <div class="pull-right">
+		          <p class="h6 text-white m-t-0">今日销售额</p>
+		          <p class="h3 text-white m-b-0">¥{$statistic.pay_today_amount}</p>
+		        </div>
+		        <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-outline fa-1-5x"></i></span> </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class='row order_detail'>
+			<div id="">
+				<p>待付款订单</p>
+				<span class='number'>{$statistic.wait_pay_order}</span>
+			</div>
+			<div id="">
+				<p>待发货订单</p>
+				<span class='number'>{$statistic.wait_ship_order}</span>
+			</div>
+		</div>
+		<div class="row">
+		  <div class="col-lg-6 col-md-6"> 
+			<div class="card">
+			  <div class="card-header">
+				<h4>销售额(元)</h4>
+			  </div>
+			  <div class="card-body">
+					
+						<canvas class="day_data_map_data_pay" id="day_data_map_data_pay"></canvas>
+						<php>
+							$category = implode("','",$month_day);
+						</php>
+						<script type="text/javascript">
+	
+							var $dashChartBarsCntDay_pay  = jQuery( '.day_data_map_data_pay' )[0].getContext( '2d' );
+							var dashChartBarsDayData_datasets_pay = []
+	
+							var $dashChartBarsDayData_pay = {
+								labels: ['{$category}'],
+								datasets: [],
+							};
+						</script>
+						<php>$series = implode(',',$pay_data);</php>
+						<script type="text/javascript">
+
+							var color = getRandomColor();
+							$dashChartBarsDayData_pay.datasets.push({
+								label: '销售额',
+								data: [{$series}],
+								borderColor: color,
+								backgroundColor:color,
+								borderWidth: 1,
+								fill: false,
+								lineTension: 0.5
+							})
+
+						</script>
+						<script>
+							new Chart($dashChartBarsCntDay_pay, {
+								type: 'line',
+								data: $dashChartBarsDayData_pay,
+								options: {
+									responsive: true,
+									title: {
+										display: true,
+										text: '销售额统计（元）'
+									},
+									tooltips: {
+										mode: 'index',
+										intersect: false,
+									},
+									hover: {
+										mode: 'nearest',
+										intersect: true
+									}
+								}
+							});
+						</script>
+					
+			  </div>
+			</div>
+		  </div>
+		  <div class="col-lg-6 col-md-6"> 
+			<div class="card">
+				<div class="card-header">
+					<h4>订单数量统计</h4>
+				</div>
+				<div class="card-body">
+					<canvas class="page_view_map_container_order" id="page_view_map_container_order"></canvas>
+					<php>
+						$viewCategory =  implode("','",$month_day);
+						$viewLegend   = implode("','",$month_day);
+						$series_data  = implode(',',$order_data);
+					</php>
+					<script type="text/javascript">
+	
+						var $page_view_map_container_order  = jQuery( '.page_view_map_container_order' )[0].getContext( '2d' );
+						var color = getRandomColor();
+						var $page_view_map_container_data_order = 
+						{
+							labels: ['{$viewCategory}'],
+							datasets: [
+								{
+									label: ['数量'],
+									borderWidth: 1,
+									borderColor: 'rgba(0,0,0,0)',
+									backgroundColor: color,
+									hoverBackgroundColor: "rgba(51,202,185,0.7)",
+									hoverBorderColor: "rgba(0,0,0,0)",
+									data: [{$series_data}]
+								}
+							]
+						};
+						new Chart($page_view_map_container_order, {
+							type: 'bar',
+							data: $page_view_map_container_data_order,
+							options: {
+									responsive: true,
+									title: {
+										display: true,
+										text: '订单数量统计'
+									},
+									tooltips: {
+										mode: 'index',
+										intersect: false,
+									},
+									hover: {
+										mode: 'nearest',
+										intersect: true
+									}
+								}
+						});
+					</script>
+				</div>
+			</div>
+		  </div>
+		</div>
+		
+        <div class="home-grid">
+            <!-- width of .grid-sizer used for columnWidth -->
+            <div class="grid-sizer"></div>
+            <foreach name="dashboard_widgets" item="vo">
+                <if condition="$vo.is_system">
+                    <div class="grid-item col-md-12" data-system="1" data-widget="{$vo.name}">
+                        <div class="dashboard-box">{:_get_system_widget($vo.name)}</div>
+                    </div>
+                    <else/>
+                    <present name="dashboard_widget_plugins[$vo['name']]">
+                        <div class="grid-item col-md-{$dashboard_widget_plugins[$vo['name']]['width']}" data-system="0"
+                             data-widget="{$vo.name}">
+                            <div class="dashboard-box">{$dashboard_widget_plugins[$vo.name]['view']}</div>
+                        </div>
+                    </present>
+
+                </if>
+
+            </foreach>
+        </div>
+        
+      </div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+</body>
+</html>

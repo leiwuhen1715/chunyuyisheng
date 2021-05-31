@@ -1,0 +1,160 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">系统快速建表:</label>
+    <div class="col-md-6 col-sm-10" style="font-size: 16px;">
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="0"> 无</label>
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="1"> 极少</label>
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="3" checked> 精简</label>
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="5"> 常用</label>
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="7" > 多用</label>
+        <label class="radio-inline"><input type="radio" class="fast-radio" name="autotable" value="9" > 全选</label>
+    </div>
+</div>
+
+<div class="form-group panel-group" id="accordion">
+    <label id="table-label" class="col-sm-2 control-label">
+        <div class="tabbable tabs-left" role="tablist">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-pills nav-stacked">
+                <foreach name="tables_example" item="table" key="k">
+                    <php>$tablename = empty($table['name']) ? 'modules' : $table['name'];</php>
+                    <li>
+                        <a class="checkbox">
+                            <label>
+                                <if $table['name']==''>
+                                    <input type="checkbox" class="table-checkbox" name="table[{$tablename}]" id="table-panel-{$tablename}" data-table="{$tablename}" checked="checked" disabled="disabled">
+                                    主表
+                                <else />
+                                    <input type="checkbox" class="table-checkbox" name="table[{$table['name']}]" id="table-panel-{$tablename}"  data-table="{$tablename}" checked="checked">
+                                    {$table['name']}表
+                                </if>
+                            </label>
+                        </a>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    </label>
+
+    <div id="field-content" class="col-md-10 col-sm-10" style="font-size: 16px;">
+        <foreach name="tables_example" item="table" key="k">
+            <php>$tablename = empty($table['name']) ? 'modules' : $table['name'];</php>
+            <div id="label-{$tablename}" class="panel-heading">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{$tablename}">↓
+                    【cmf_item_{$module['pinyin']}<if $table['name']>_{$table['name']}</if>】：
+                    字段(<label id="{$tablename}-fieldnum">5</label>)个，
+                    <switch name="table['relate']">
+                        <case value="1"> 关联(一对一)</case>
+                        <case value="2"> 关联(一对多)</case>
+                        <default />
+                    </switch>
+                </a>
+            </div>
+
+            <div id="collapse{$tablename}" class="panel-collapse collapse">
+                <table class="table panel-body">
+                    <thead>
+                    <tr>
+                        <th width="10%">字段</th>
+                        <th width="10%">别名</th>
+                        <th width="10%">字段类型</th>
+                        <th width="6%">存储长度</th>
+                        <th width="6%">小数</th>
+                        <th width="10%">默认值</th>
+                        <th width="5%">可NULL</th>
+                        <th width="8%">启用</th>
+                    </tr>
+                    </thead>
+                    <foreach  name="table['fields']" key="field" item="conf">
+                    <tr>
+                        <td><input class="form-control" type="text" name="post[{$tablename}][{$field}][name]" size="1" value="{$field}"></td>
+                        <td><input class="form-control" type="text" name="post[{$tablename}][{$field}][alias]" size="1" value="{$conf['alias']}"></td>
+                        <td>
+                            <php>echo \plugins\modules\lib\ControlForm::fieldTypeSelect("post[".$tablename."][".$field."][type]", isset($conf['type'])?$conf['type']:'')</php>
+                        </td>
+                        <td><input class="form-control" type="text" name="post[{$tablename}][{$field}][len]" size="1" value="{$conf['len']}"></td>
+                        <td><input class="form-control" type="text" name="post[{$tablename}][{$field}][float]" size="1" value="{$conf['float'] ?? ''}"></td>
+                        <td><input class="form-control" type="text" name="post[{$tablename}][{$field}][default]" size="1" value="{$conf['default'] ?? ''}"></td>
+                        <td><input class="form-control" type="checkbox" name="post[{$tablename}][{$field}][null]" size="1" value="{$conf['null'] ?? ''}"></td>
+                        <td>
+                            <php>
+                                $level = isset($conf['level']) ? $conf['level'] : 9;
+                                $disabled = $conf['level']==0 ? 'disabled' : '';
+                                $checked  = $conf['level']==0 ? 'checked="checked"' : '';
+                            </php>
+                            <input class="form-control state-checkbox" type="checkbox" name="post[{$tablename}][{$field}][stat]"
+                                   data-table="{$tablename}" data-level="{$conf['level']}" {$disabled} {$checked} >
+                        </td>
+                    </tr>
+                    </foreach>
+                </table>
+            </div>
+        </foreach>
+    </div>
+</div>
+
+
+<script>
+    $(function(){
+        set_fasttable_level(3);
+    });
+    //字段-启用与否
+    $('.state-checkbox').click(function(){
+        var tablename = $(this).attr('data-table');
+        var selected_num = $('#collapse'+tablename+' input[type=checkbox]:checked').length;//当前表选择字段数
+        $('#'+tablename + '-fieldnum').html(selected_num);//设置数字
+    });
+
+    //快速建表-选项-切换
+    $(".fast-radio").click(function(){
+        set_fasttable_level(this.value);
+    });
+
+    //表-勾选
+    $(".table-checkbox").click(function(){
+        var tablename = $(this).attr('data-table');
+        if(this.checked != true){
+            $('#label-'+tablename).hide();//隐藏label
+            $('#collapse'+tablename).collapse('hide');//隐藏列表
+        }else{
+            $('#label-'+tablename).show();//显示label
+            $('#collapse'+tablename).collapse('show');
+        }
+    });
+
+    //字段-启用与否-checkbox被点击后-设置-数值
+    function set_checkbox_num(tablename){
+        if(tablename){
+            var selected_num = $('#collapse'+tablename+' input[type=checkbox]:checked').length;//当前表选择字段数
+            $('#'+tablename + '-fieldnum').html(selected_num);//设置数字
+        }
+    }
+
+    //快速建表-设置-checkbox
+    function set_fasttable_level(level){
+        //设置勾选
+        $(".state-checkbox").each(function(){
+            if($(this).attr('data-level') <= level)
+            {
+                $(this).prop("checked", true);
+            }else{
+                $(this).prop("checked",false);
+            }
+        });
+
+        //设置表选择和更新数量值
+        $(".table-checkbox").each(function(){
+            var tablename = $(this).attr('data-table');
+            if(level==0){
+                if(tablename!='modules'){
+                    $(this).prop("checked",false);//radio选择:level=0时,非主表就取消选择
+                    $('#label-'+tablename).hide();//隐藏label
+                }
+            }else{
+                $(this).prop("checked",true);
+                $('#label-'+tablename).show();//显示label
+            }
+            set_checkbox_num(tablename);//同步数量值
+        });
+    }
+
+</script>

@@ -1,0 +1,126 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <eq name='type' value='0'>
+            <li class="active"><a href="{:url('user/adminForward/index')}">宝石提现</a></li>
+            <li ><a href="{:url('user/adminForward/index',['type'=>2])}">余额提现</a></li>
+        <else>
+            <li><a href="{:url('user/adminForward/index')}">提现列表</a></li>
+            <li class="active"><a href="{:url('user/adminForward/index',['type'=>2])}">余额提现</a></li>
+        </eq>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('user/adminForward/index')}">
+        用户ID：
+        <input class="form-control" type="text" name="uid" style="width: 200px;" value="{:input('request.uid')}"
+               placeholder="请输入用户ID">
+        关键字：
+        <input class="form-control" type="text" name="keyword" style="width: 200px;" value="{:input('request.keyword')}"
+               placeholder="用户名/昵称/邮箱/手机">
+        状态：
+        <select class="form-control" name="status">
+            <option value="">全部</option>
+            <option value="0">未处理</option>
+            <option value="1">已处理</option>
+            <option value="2">已驳回</option>
+        </select>
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        <input type='hidden' name='type' value='{$type}'>
+        <a class="btn btn-danger" href="{:url('user/adminForward/index')}">清空</a>
+        <a class="btn btn-success js-ajax-dialog-btn" href="{:url('user/adminForward/cenck_pay')}" data-msg="你确定要操作员吗？">检测支付</a>
+    </form>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('user/adminForward/export')}">
+	    时间:
+	    <input type="text" class="form-control js-bootstrap-datetime" name="start_time"
+	           value="{$start_time|default=''}"
+	           style="width: 140px;" autocomplete="off">-
+	    <input type="text" class="form-control js-bootstrap-datetime" name="end_time"
+	           value="{$end_time|default=''}"
+	           style="width: 140px;" autocomplete="off"> &nbsp; &nbsp;
+	    <input type='hidden' name='type' value='{$type}'>
+	    <input type="submit" class="btn btn-primary" name="sub" value="导出">
+	
+	</form>
+    <form method="post" class="js-ajax-form">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>{:lang('USERNAME')}</th>
+                <th>金额</th>
+                <eq name='type' value='0'>
+                    <th>蓝宝石</th>
+                </eq>
+                <th>单号</th>
+                <th>银行</th>
+                <th>卡号</th>
+                <th>姓名</th>
+                <th>申请日期</th>
+                <th>{:lang('STATUS')}</th>
+                <th>{:lang('ACTIONS')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <php>
+                $statuses=array("0"=>'未处理',"1"=>'已处理',"2"=>'已驳回');
+               
+            </php>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo['user_nickname']?$vo['user_nickname']:($vo['mobile']?$vo['mobile']:lang('THIRD_PARTY_USER'))}
+                    </td>
+                    <td>{$vo.money}</td>
+                    <eq name='type' value='0'>
+                        <th>{$vo.baoshi}</th>
+                    </eq>
+                    <td>{$vo.order_sn}</td>
+                    <td>{$vo.bank_name}</td>
+                    <td>{$vo.bank_on}</td>
+                    <td>{$vo.real_name}</td>
+                    <td>{:date('Y-m-d H:i:s',$vo['addtime'])}</td>
+                    <td>
+                  		<switch name="vo.status">
+                            <case value="0">
+                                <span class="label label-warning">{$statuses[$vo['status']]}</span>
+                            </case>
+                            <case value="1">
+                                <span class="label label-success">{$statuses[$vo['status']]}</span>
+                            </case>
+                            <case value="2">
+                                <span class="label label-danger">{$statuses[$vo['status']]}</span>
+                            </case>
+                        </switch>
+                        <switch name="vo.send_status">
+                            <case value="0">
+                                <span class="label label-warning">未导入</span>
+                            </case>
+                            <case value="1">
+                                <span class="label label-success">完成</span>
+                            </case>
+                            <case value="2">
+                                <span class="label btn-primary">处理中</span>
+                            </case>
+                            <case value="3">
+                                <span class="label label-danger">失败</span>
+                            </case>
+                            <case value="4">
+                                <span class="label label-danger">未提交银行</span>
+                            </case>
+                        </switch>
+                        
+                  	</td>
+                    <td>
+                        <a  href="{:url('user/adminForward/edit',['id'=>$vo['id']])}" >操作</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

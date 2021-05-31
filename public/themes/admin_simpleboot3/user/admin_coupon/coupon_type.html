@@ -1,0 +1,71 @@
+<include file="public@new_header"/>
+</head>
+<body>
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li><a href="{:cmf_url('adminCoupon/index')}">用户优惠劵</a></li>
+                <li><a href="{:cmf_url('adminCoupon/addUserCoupon')}" target="_self">添加优惠劵</a></li>
+                <li class="layui-this"><a>优惠劵类型</a></li>
+              </ul>
+            </div>
+            <div class="card-body js-check-wrap">
+               
+              <div class="layui-card-body table-responsive">
+                <form method="post" class="js-ajax-form" action="">
+                    <table class="layui-table" style="margin: 0">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>描述</th>
+                                <th>金额</th>
+                                <th>类型</th>
+                                <th>天数</th>
+                                <th>{:lang('ACTIONS')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <foreach name="list" item="vo">
+                                <tr>
+                                    <td>{$vo.name}</td>
+                                    <td>{$vo.remark}</td>
+                                    <td>{$vo.amount}</td>
+                                    <td>
+                                        <switch name="vo.type">
+                                            <case value="0">
+                                                <span class="label label-danger">极速问诊</span>
+                                            </case>
+                                            <case value="1">
+                                                <span class="label label-success">商城</span>
+                                            </case>
+                                        </switch>
+                                    </td>
+                                    <td>{$vo.days}</td>
+                                    <td>
+
+                                        <a class="btn btn-xs btn-success" href="{:url('adminCoupon/couponEdit',array('id'=>$vo['id']))}">编辑</a>
+                                    </td>
+                                </tr>
+                            </foreach>
+                        </tbody>
+                    </table>
+                    <ul class='pagination'>{$page}</ul>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    <include file="public@scripts"/>
+    <script src="__STATIC__/js/layui/layui.js"></script>
+    <script>
+        layui.use(['form'], function(){
+          var form = layui.form;
+        })
+    </script>
+
+</body>
+</html>

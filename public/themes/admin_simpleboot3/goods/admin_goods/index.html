@@ -1,0 +1,190 @@
+<include file="public@new_header"/>
+</head>
+<body>
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <a href="{:url('AdminGoods/index')}">产品列表</a>
+                </li>
+                <li>
+                  <a href="{:url('adminGoods/add')}">添加产品</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body js-check-wrap">
+              <form class="layui-form form-inline margin-top-20" method="post" action="{:cmf_url('AdminGoods/daochu')}">
+                <div class="demoTable layui-form-item layui-card-header layuiadmin-card-header-auto" style='margin-bottom: 10px'>
+                  搜索：
+                  <div class="layui-inline">
+                    <input type="text" class="layui-input" id="title" name='title'
+                         value="" placeholder="产品名称">
+                  </div>
+                  <div class="layui-inline">
+                     <select  class="layui-input" name="cate_id" id="cate_id">
+                         <option value="">分类</option>
+                         {$category_tree}
+                     </select>
+                  </div>
+                  <div class="layui-inline">
+                     <select  class="layui-input" name="status" id="status">
+                         <option value="">状态</option>
+                         <option value="1">上架</option>
+                         <option value="0">下架</option>
+                     </select>
+                  </div>
+
+                  <button type='button' class="layui-btn" lay-submit lay-filter="LAY-app-order-search">搜索</button>
+              </div>
+
+              <div class="layui-card-body table-responsive">
+                  <table class="layui-hide" id="test" lay-filter="test"></table>
+              </div>
+              </form>
+            </div>
+        </div>
+    </div>
+          
+        
+<script src="__STATIC__/js/layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+  <a lay-href="{:cmf_url('AdminSeckill/add')}?id={{d.goods_id}}" class="layui-btn layui-btn-xs">添加秒杀</a>
+  <a href="{:cmf_url('AdminGoods/edit')}?id={{d.goods_id}}" class="layui-btn layui-btn-xs">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="switchTpl">
+  <input type="checkbox" name="" value="{{d.goods_id}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.is_on_sale == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="switchTpl1">
+  <input type="checkbox" name="" value="{{d.goods_id}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo1" {{ d.is_recommend == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="test-table-totalRow-toolbarDemo">
+  <div class="layui-btn-container">
+    <button type='button' class="layui-btn layui-btn-sm" lay-event="getCheckData">删除</button>
+  </div>
+</script>
+<script>
+
+    layui.config({
+      base: '__TMPL__/public/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use('index');
+
+    layui.use(['form','table'], function(){
+      var form = layui.form
+      ,layer = layui.layer
+      ,table = layui.table;
+
+      table.render({
+        elem: '#test'
+        ,url:"{:cmf_url('AdminGoods/ajax')}"
+        ,toolbar:"#test-table-totalRow-toolbarDemo"
+        ,cols: [[
+          {field:'goods_id', type: 'checkbox'}
+          ,{field:'goods_id', width:80, title: 'ID', sort: true}
+          ,{field:'goods_name', title: '产品'}
+          ,{field:'cate_name', width:110, title: '分类'}
+          ,{field:'shop_price',width:110, title: '价格',sort: true}
+          ,{field:'store_count', width:110, title: '库存', sort: true}
+          ,{field:'last_update',  width:210,title: '更新时间', sort: true}
+          ,{field:'is_recommend',  title: '推荐',width:100, templet: '#switchTpl1', unresize: true}
+          ,{field:'is_on_sale',  title: '上架',width:100, templet: '#switchTpl', unresize: true}
+          ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
+        ]]
+        ,id: 'testReload'
+        ,page: true
+      });
+
+        //监听性别操作
+        form.on('switch(sexDemo)', function(obj){
+
+            var is_on_sale = obj.elem.checked?1:0;
+            $.ajax({
+                type: "post",
+                url: "{:cmf_url('AdminGoods/changeVal')}",
+                data: {id: this.value,field:'is_on_sale',value:is_on_sale},
+                dataType: "json",
+                success: function(data) {
+
+                }
+            });
+        });
+        //监听性别操作
+        form.on('switch(sexDemo1)', function(obj){
+
+            var values = obj.elem.checked?1:0;
+            $.ajax({
+                type: "post",
+                url: "{:cmf_url('AdminGoods/changeVal')}",
+                data: {id: this.value,field:'is_recommend',value:values},
+                dataType: "json",
+                success: function(data) {
+
+                }
+            });
+        });
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+          var checkStatus = table.checkStatus(obj.config.id);
+          console.log(obj)
+          switch(obj.event){
+            case 'getCheckData':
+              var data = checkStatus.data;
+              layer.alert(JSON.stringify(data));
+            break;
+            case 'getCheckLength':
+              var data = checkStatus.data;
+              layer.msg('选中了：'+ data.length + ' 个');
+            break;
+            case 'isAll':
+              layer.msg(checkStatus.isAll ? '全选': '未全选');
+            break;
+          };
+        });
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+
+            var data = obj.data;
+
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+
+                    $.ajax({
+                        type: "get",
+                        url: "{:cmf_url('AdminGoods/delete')}",
+                        data: {"ids": obj.data.goods_id},
+                        dataType: "json",
+                        success: function(data) {
+                          if(data.code == 1){
+                              obj.del();
+                              layer.close(index);
+                          }else{
+                            layer.msg(data.msg);
+                          }
+                        }
+                    });
+                });
+            }
+        });
+        //监听搜索
+        form.on('submit(LAY-app-order-search)', function(data){
+          var field = data.field;
+          
+          //执行重载
+          table.reload('testReload', {
+            where: field
+          });
+        });
+    });
+</script>
+
+
+<include file="public@scripts"/>
+
+
+</body>
+</html>

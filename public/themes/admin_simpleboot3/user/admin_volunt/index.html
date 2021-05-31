@@ -1,0 +1,73 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href='{:cmf_url("user/adminVolunt/index")}'>申请列表</a></li>
+                            </ul>
+                            <div class="card-body">
+                                <!-- <form class="well form-inline margin-top-20" method="post" action="{:url('user/adminIndex/index')}">
+                                    关键字：
+                                    <input class="form-control" type="text" name="keyword" style="width: 200px;" value="{:input('request.keyword')}"
+                                           placeholder="用户名/昵称/邮箱/手机">
+                                    <input type="submit" class="btn btn-primary" value="搜索"/>
+                                    <a class="btn btn-danger" href="{:url('user/adminIndex/index')}">清空</a>
+                                </form> -->
+                                <form method="post" class="js-ajax-form">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" >
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>姓名</th>
+                                                <th>移动电话</th>
+                                                <th>民族</th>
+                                                <th>户口所在地</th>
+                                                <th>职业</th>
+                                                <th>申请时间</th>
+                                                <th>IP</th>
+                                                <th>{:lang('ACTIONS')}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <foreach name="list" item="vo">
+                                                <tr>
+                                                    <td>{$vo.id}</td>
+                                                    <td>{$vo.name}</td>
+                                                    <td>{$vo.mobile}</td>
+                                                    <td>{$vo.nation}</td>
+                                                    <td>{$vo.identify_address}</td>
+                                                    <td>{$vo.occupation}</td>
+                                                    <td>{:date('Y-m-d H:i',$vo.add_time)}</td>
+                                                    <td>{$vo.ip}</td>
+                                                    <td>
+                                                       <a class='btn btn-xs btn-primary' href="javascript:parent.openIframeLayer('{:url('adminVolunt/edit',['id'=>$vo.id])}','下级',{});">查看</a>
+                                                    </td>
+                                                </tr>
+                                            </foreach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="pagination">{$page}</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

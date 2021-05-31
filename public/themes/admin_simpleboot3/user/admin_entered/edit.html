@@ -1,0 +1,139 @@
+<include file="public@header"/>
+<style type="text/css">
+    .img_list img{width:25%;height:200px;}
+    .im_video video{width:43%;height: 300px}
+</style>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+          
+            <div class="container-fluid">
+            
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs">
+                                <li><a href="{:url('adminEntered/index')}">报名列表</a></li>
+                                <li class="active"><a>查看报名</a></li>
+                            </ul>
+                            <div class="card-body">
+                                <form class="form-horizontal js-ajax-form margin-top-20" action="{:url('adminEntered/editPost')}" method="post">
+                                    <div class="form-group">
+                                        <label for="input-name" class="col-sm-2 control-label">姓名</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            {$data.username}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">电话</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            {$data.mobile}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">性别</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <switch name="data.sex">
+                                                <case value="1">
+                                                    <span class="label label-success">男</span>
+                                                </case>
+                                                <case value="2">
+                                                    <span class="label label-warning">女</span>
+                                                </case>
+                                            </switch>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">照片</label>
+                                        <div class="col-md-6 col-sm-10 img_list">
+                                            <foreach name='$data.pics' item='vo'>
+                                                <img src="{:cmf_get_image_url($vo)}">
+                                            </foreach>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">视频</label>
+                                        <div class="col-md-6 col-sm-10 im_video">
+                                            <video style="height:auto;" src="{:cmf_get_image_url($data.video)}" id="video0" controls="controls"></video>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">主播经验</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <switch name="data.jingyan">
+                                                <case value="1">
+                                                    <span class="label label-success">是</span>
+                                                </case>
+                                                <case value="0">
+                                                    <span class="label label-warning">否</span>
+                                                </case>
+                                            </switch>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">粉丝基础</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <switch name="data.fensi">
+                                                <case value="1">
+                                                    <span class="label label-success">是</span>
+                                                </case>
+                                                <case value="0">
+                                                    <span class="label label-warning">否</span>
+                                                </case>
+                                            </switch>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">公司合约</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <switch name="data.company">
+                                                <case value="1">
+                                                    <span class="label label-success">是</span>
+                                                </case>
+                                                <case value="0">
+                                                    <span class="label label-warning">否</span>
+                                                </case>
+                                            </switch>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-remark" class="col-sm-2 control-label">参赛意向</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <textarea type="text" class="form-control" id="input-remark" name="remark">{$data.description}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{:lang('STATUS')}</label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <label class="radio-inline">
+                                                <php>$active_true_checked=($data['status']==1)?"checked":"";</php>
+                                                <input type="radio" name="status" value="1" {$active_true_checked}> 审核
+                                            </label>
+                                            <label class="radio-inline">
+                                                <php>$active_false_checked=($data['status']==0)?"checked":"";</php>
+                                                <input type="radio" name="status" value="0" {$active_false_checked}> 未审核
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <input type="hidden" name="id" value="{$data.id}"/>
+                                            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                                            <a class="btn btn-default" href="{:url('admin/rbac/index')}">{:lang('BACK')}</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="__TMPL__/public/assets/js/admin.js"></script>
+</body>
+</html>

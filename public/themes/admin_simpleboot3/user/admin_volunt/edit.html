@@ -1,0 +1,206 @@
+<include file="public@header"/>
+<link rel="stylesheet" href="__STATIC__/js/layui/css/layui.css">
+<script type="text/javascript" src="__STATIC__/js/layui/layui.js"></script>
+<style media="screen">
+    .layui-form-label{width:150px}
+    .width-500{width:500px}
+    .width-300{width:300px}
+    .width-700{width: 700px}
+    .layui-input-inline,.layui-input-inline{line-height:36px}
+    .layui-form-item{width: 450px;display: inline-block;}
+</style>
+</head>
+<body>
+  <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+              
+                <div class="container-fluid">
+                
+                    <div class="row">
+                       <div class="col-md-12">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="wrap js-check-wrap">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a>申请信息</a></li>
+                                    </ul>
+
+                                    <form class="layui-form js-ajax-form margin-top-20"  action="{:url('AdminIndex/addPost')}" method="post" class="form-horizontal">
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">姓名</label>
+                                        <div class="layui-input-inline">
+                                            {$data.name}
+                                        </div>
+                                      </div>
+
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">民族</label>
+                                        <div class="layui-input-inline">
+                                          {$data.nation}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">学历</label>
+                                        <div class='layui-input-inline'>
+                                            {$data.education}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">证件类型</label>
+                                        <div class="layui-input-inline">
+                                          {$data.type_id}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">证件号码</label>
+                                        <div class="layui-input-inline">
+                                          {$data.id_code}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">户口所在地</label>
+                                        <div class="layui-input-inline">
+                                          {$data.identify_address}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">家庭住址</label>
+                                        <div class="layui-input-inline">
+                                          {$data.cur_addr}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">工作单位</label>
+                                        <div class="layui-input-inline">
+                                          {$data.work_unit}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">职业</label>
+                                        <div class="layui-input-inline">
+                                          {$data.occupation}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">邮政编码</label>
+                                        <div class="layui-input-inline">
+                                          {$data.post_code}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">献血次数</label>
+                                        <div class="layui-input-inline">
+                                          {$data.dontimes}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">献血量</label>
+                                        <div class="layui-input-inline">
+                                          {$data.amount}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">血型</label>
+                                        <div class="layui-input-inline">
+                                          {$data.abo}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">是否献成分血</label>
+                                        <div class="layui-input-inline">
+                                          {$data.isbldcp}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">无偿献血获奖情况</label>
+                                        <div class="layui-input-inline">
+                                          {$data.prize}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">移动电话</label>
+                                        <div class="layui-input-inline">
+                                          {$data.mobile}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">其他联系方式</label>
+                                        <div class="layui-input-inline">
+                                          {$data.other_contact}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">电子邮箱</label>
+                                        <div class="layui-input-inline">
+                                          {$data.email}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">QQ</label>
+                                        <div class="layui-input-inline">
+                                          {$data.qq}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">个人爱好</label>
+                                        <div class="layui-input-inline">
+                                          {$data.hobby}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">个人特长</label>
+                                        <div class="layui-input-inline">
+                                          {$data.specialty}
+                                        </div>
+                                      </div>
+                                      <div class="layui-form-item">
+                                        <label class="layui-form-label">服务时间</label>
+                                        <div class="layui-input-inline">
+                                          <p>08:00 — 11:00 ： {$data.am}</p>
+                                          <p>14:00 — 17:00 ： {$data.pm}</p>
+                                        </div>
+                                      </div>
+                                    </form>
+
+                                    <script>
+                                    //Demo
+                                    layui.use('form', function(){
+                                        var form = layui.form;
+                                        form.on('select(type)', function(data){
+                                            //得到被选中的值
+                                            var type = data.value
+
+                                            $.ajax({
+                                              type: "POST",//方法类型
+                                              dataType: "json",//预期服务器返回的数据类型
+                                              url: "{:url('adminIndex/type')}",//url
+                                              data: {type:type},
+                                              success: function (result) {
+
+                                                if(result.code == 1){
+
+                                                    $('#tishi-news').html(result.data._html);
+                                                    form.render();
+                                                }
+
+                                              }
+                                            });
+
+                                        });
+                                    });
+                                    </script>
+                                </div>
+                              </div>
+                              <script type="text/javascript" src="__TMPL__/public/assets/js/admin.js"></script>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

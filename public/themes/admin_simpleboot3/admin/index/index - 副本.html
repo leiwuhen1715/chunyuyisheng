@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>{:lang('ADMIN_CENTER')}</title>
+<link rel="icon" href="__TMPL__/public/assets/images/favicon.ico" type="image/ico">
+<link href="__TMPL__/public/assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="__TMPL__/public/assets/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="__STATIC__/font-awesome/css/font-awesome.min.css?page=index" rel="stylesheet" type="text/css">
+<link href="__TMPL__/public/assets/js/bootstrap-multitabs/multitabs.min.css" rel="stylesheet">
+<link href="__TMPL__/public/assets/css/style.min.css" rel="stylesheet">
+</head>
+    <script>
+        //全局变量
+        var GV = {
+            HOST: "{$_SERVER['HTTP_HOST']|default=''}",
+            ROOT: "__ROOT__/",
+            WEB_ROOT: "__WEB_ROOT__/",
+            JS_ROOT: "static/js/"
+        };
+        var main_url = "{:url('admin/main/index')}";
+    </script>
+    <style type="text/css">
+        .sidebar-header {
+          position: relative;
+          overflow: hidden;
+          width: 100%;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+        }
+        .logo {
+          height: 40px;
+          line-height: 40px;
+          font-size: 20px;
+          letter-spacing: 4px
+        }
+        #sidebar-shortcuts{
+          width:100%;
+          height: 28px;
+          line-height: 28px;
+          text-align: center;
+          border: none;
+        }
+
+        #sidebar-shortcuts a{
+          width:10%;
+         display: inline-block;
+        }
+    </style>
+    <php>$submenus=$menus;</php>
+
+    <php>
+        if (!function_exists('getsubmenu')) {
+            function getsubmenu($submenus){
+    </php>
+    <notempty name="submenus">
+        <php>foreach($submenus as $menu){</php>
+            <php>
+                $menu_name=lang($menu['lang']);
+                $menu_name=$menu['lang']==$menu_name?$menu['name']:$menu_name;
+            </php>
+            <php>if(empty($menu['items'])){</php>
+            <li class="nav-item"> 
+              <a class="multitabs" href="{$menu.url}">
+                <i class="fa fa-{$menu.icon|default='desktop'}"></i>
+                   {$menu_name}
+              </a>
+            </li>
+            <php>}else{</php>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="javascript:void(0)">
+                 <i class="fa fa-{$menu.icon|default='desktop'}"></i>
+                  {$menu_name}
+              </a>
+              <ul class="nav nav-subnav">
+                  <php>getsubmenu1($menu['items'])</php>
+              </ul>
+            </li>
+            <php>}</php>
+        <php>}</php>
+    </notempty>
+    <php>
+            }
+        }
+    </php>
+
+    <php>
+        if (!function_exists('getsubmenu1')) {
+            function getsubmenu1($submenus){
+    </php>
+    <php>foreach($submenus as $menu){</php>
+        <php>
+            $menu_name=lang($menu['lang']);
+            $menu_name=$menu['lang']==$menu_name?$menu['name']:$menu_name;
+        </php>
+        <php>if(empty($menu['items'])){</php>
+          <li> 
+            <a class="multitabs" href="{$menu.url}" data-iframe="true">{$menu_name}</a>
+          </li>
+        <php>}else{</php>
+           <li class="nav-item nav-item-has-subnav">
+             <a href="javascript:void(0)">{$menu_name}</a>
+             <ul class="nav nav-subnav">
+                <php>getsubmenu2($menu['items'])</php>
+             </ul>
+           </li>
+        <php>}</php>
+    <php>}</php>
+    <php>}
+    }
+    </php>
+
+    <php>
+        if (!function_exists('getsubmenu2')) {
+            function getsubmenu2($submenus){</php>
+    <php>foreach($submenus as $menu){</php>
+        <php>
+            $menu_name=lang($menu['lang']);
+            $menu_name=$menu['lang']==$menu_name?$menu['name']:$menu_name;
+        </php>
+        <li>
+            <a class="multitabs" href="{$menu.url}">{$menu_name}</a>
+        </li>
+    <php>}</php>
+    <php>}
+    }
+    </php>   
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside class="lyear-layout-sidebar">
+      
+      <!-- logo -->
+    <div id="logo" class="sidebar-header">
+        <a class="logo" href="{:url('admin/index/index')}">
+            <img src='__TMPL__/public/images/logo.png' style='width:203px;height:40px;left:0'>
+        </a>
+        <div id="sidebar-shortcuts">
+              <a class="label label-dark" href="__ROOT__/"
+                   title="{:lang('WEBSITE_HOME_PAGE')}"
+                   target="_blank"
+                   data-toggle="tooltip"><i class="mdi mdi-home"></i>
+              </a>
+              <if condition="cmf_auth_check(cmf_get_current_admin_id(),'user/AdminAsset/index')">
+                  <a class="label label-success multitabs" data-url="{:url('user/AdminAsset/index')}" href="javascript:void(0)" 
+                     title="资源管理"
+                     data-toggle="tooltip"><i class="mdi mdi-file"></i>
+                   </a>
+              </if>
+              <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/RecycleBin/index')">
+                <a class="label label-purple multitabs" data-url="{:url('admin/RecycleBin/index')}" href="javascript:void(0)"
+                       title="回收站"
+                       data-toggle="tooltip"><i class="mdi mdi-recycle"></i>
+                </a>
+              </if>
+              <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/Setting/clearcache')">
+                <a class="label label-danger multitabs" data-url="{:url('admin/Setting/clearcache')}" href="javascript:void(0)"
+                       title="{:lang('ADMIN_SETTING_CLEARCACHE')}"
+                       data-toggle="tooltip"><i class="mdi mdi-cached"></i>
+                </a>
+              </if>
+              <if condition="APP_DEBUG">
+                <a class="label label-info multitabs" data-url="{:url('admin/Menu/index')}" 
+                href="javascript:void(0)"
+                       title="{:lang('ADMIN_MENU_INDEX')}"
+                       data-toggle="tooltip"><i class="mdi mdi-format-list-bulleted"></i>
+                </a>
+              </if>
+        </div>
+      </div>
+      <div class="lyear-layout-sidebar-scroll"> 
+        
+        <nav class="sidebar-main">
+          <ul class="nav nav-drawer">
+            {:getsubmenu($submenus)}
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+          </div>
+          
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" data-toggle="dropdown">
+                <if condition="isset($admin['avatar']) && $admin['avatar']">
+                    <img class="img-avatar img-avatar-48 m-r-10" 
+                         src="{:cmf_get_user_avatar_url($admin['avatar'])}" alt="{$admin.user_login|default=''}">
+                    <else/>
+                    <img class="img-avatar img-avatar-48 m-r-10" 
+                         src="__TMPL__/public/images/avatar.jpg" alt="{$admin.user_login|default=''}">
+                </if>
+                <span>{:lang('WELCOME_USER',array('user_nickname' => empty($admin['user_nickname'] )? $admin['user_login'] : $admin['user_nickname']))} <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/Setting/site')">
+                  <li> <a class="multitabs" data-url="{:url('setting/site')}" href="javascript:void(0)"><i class="mdi mdi-account"></i> {:lang('ADMIN_SETTING_SITE')}</a> </li>
+                </if>
+                <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/Setting/password')">
+                  <li> <a class="multitabs" data-url="{:url('setting/password')}" href="javascript:void(0)"><i class="mdi mdi-lock-outline"></i> {:lang('ADMIN_SETTING_PASSWORD')}</a> </li>
+                </if>
+                <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/Setting/clearcache')">
+                  <li> <a class="multitabs" href="javascript:void(0)" data-url="{:url('admin/Setting/clearcache')}"><i class="mdi mdi-delete"></i> {:lang('ADMIN_SETTING_CLEARCACHE')}</a></li>
+                </if>
+                <li class="divider"></li>
+                <li> <a href="{:url('Public/logout')}"><i class="mdi mdi-logout-variant"></i> {:lang('LOGOUT')}</a> </li>
+              </ul>
+            </li>
+            <!--切换主题配色-->
+		    <li class="dropdown dropdown-skin">
+			  <span data-toggle="dropdown" class="icon-palette"><i class="mdi mdi-palette"></i></span>
+			  <ul class="dropdown-menu dropdown-menu-right" data-stopPropagation="true">
+			    <li class="drop-title"><p>LOGO</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="logo_bg" value="default" id="logo_bg_1">
+                    <label for="logo_bg_1"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_2" id="logo_bg_2">
+                    <label for="logo_bg_2"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_3" id="logo_bg_3">
+                    <label for="logo_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_4" id="logo_bg_4">
+                    <label for="logo_bg_4"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_5" id="logo_bg_5">
+                    <label for="logo_bg_5"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_6" id="logo_bg_6">
+                    <label for="logo_bg_6"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_7" id="logo_bg_7">
+                    <label for="logo_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_8" id="logo_bg_8" checked>
+                    <label for="logo_bg_8"></label>
+                  </span>
+				</li>
+				<li class="drop-title"><p>头部</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="header_bg" value="default" id="header_bg_1">
+                    <label for="header_bg_1"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_2" id="header_bg_2">
+                    <label for="header_bg_2"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_3" id="header_bg_3">
+                    <label for="header_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="header_bg" value="color_4" id="header_bg_4">
+                    <label for="header_bg_4"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_5" id="header_bg_5">
+                    <label for="header_bg_5"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_6" id="header_bg_6">
+                    <label for="header_bg_6"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_7" id="header_bg_7">
+                    <label for="header_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="header_bg" value="color_8" id="header_bg_8" checked>
+                    <label for="header_bg_8"></label>
+                  </span>
+				</li>
+				<li class="drop-title"><p>侧边栏</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="sidebar_bg" value="default" id="sidebar_bg_1">
+                    <label for="sidebar_bg_1"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_2" id="sidebar_bg_2">
+                    <label for="sidebar_bg_2"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_3" id="sidebar_bg_3">
+                    <label for="sidebar_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_4" id="sidebar_bg_4">
+                    <label for="sidebar_bg_4"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_5" id="sidebar_bg_5">
+                    <label for="sidebar_bg_5"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_6" id="sidebar_bg_6">
+                    <label for="sidebar_bg_6"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_7" id="sidebar_bg_7">
+                    <label for="sidebar_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_8" id="sidebar_bg_8" checked>
+                    <label for="sidebar_bg_8"></label>
+                  </span>
+				</li>
+			  </ul>
+			</li>
+            <!--切换主题配色-->
+          </ul>
+          
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      
+      <div id="iframe-content"></div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<script type="text/javascript" src="__TMPL__/public/assets/js/jquery.min.js"></script>
+<script src="__STATIC__/js/wind.js"></script>
+<script type="text/javascript" src="__TMPL__/public/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__TMPL__/public/assets/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="__TMPL__/public/assets/js/bootstrap-multitabs/multitabs.js"></script>
+<script type="text/javascript" src="__TMPL__/public/assets/js/index.min.js"></script>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

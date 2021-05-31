@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>{$category.name|default=$posti} - {$site_info.site_seo_title|default=''}</title>
+    <meta name="keywords" content="{$category.keyword}"/>
+    <meta name="description" content="{$category.description}">
+    <include file="public@head"/>
+</head>
+<body>
+ 
+  <include file="public@header"/>
+  <div id="position">
+    <div class="wrapper auto">当前所在位置：<a href="/">首页</a> &gt; <a href="{:cmf_url('portal/'.$act.'/index')}">{$posti}</a> <notempty name='category'>&gt; {$category.name}</notempty></div>
+  </div>
+  <div class="wrap-white">
+    <div class="wrapper auto">
+      <div id="left" class="fl">
+        <div id="menu">
+          <section>
+            <h2>{$posti}</h2>
+            <h3></h3>
+          </section>
+          <dl>
+            <itemcate module_id="$module_id">
+              <dd <eq name='$category.id' value='$vo.id'>class="current"</eq>><a href="{:cmf_url('portal/'.$act.'/index',['id'=>$vo.id])}" title="{$vo.name}">{$vo.name}</a></dd>
+            </itemcate>
+          </dl>
+        </div>
+        <include file="public@left"/>
+        
+      </div>
+      <div id="right" class="fr">
+        <div id="lmbt"><span>{$posti}</span></div>
+        
+        <div id="notice-list">
+          <ul>
+            <foreach name='list' item='vo'>
+                <li>
+                  <span>{:date('Y-m-d',$vo.showtime)}</span>
+                  <a href="{:cmf_url('portal/'.$act.'/detail',['id'=>$vo.id])}" title="{$vo.title}">{$vo.title}</a>
+                </li>
+            </foreach>
+          </ul>
+        </div>
+
+        <ul id="pageinfo" class="tc">
+          {$page}
+        </ul>
+      </div>
+      <div class="clear"></div>
+     
+      <include file="public@flink"/>
+    </div>
+  </div>
+
+  <include file="public@footer"/>
+</body>
+</html>
